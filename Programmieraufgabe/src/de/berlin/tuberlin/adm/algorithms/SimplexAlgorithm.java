@@ -22,6 +22,9 @@ public class SimplexAlgorithm {
 		stopwatch.stop();
 	}
 	
+	/**
+	 * Step 1: Initalisierung
+	 */
 	public void initialize(){
 		//V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
