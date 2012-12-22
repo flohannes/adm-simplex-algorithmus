@@ -32,9 +32,9 @@ public class SimplexAlgorithm {
 	 * Step 1: Initalisierung
 	 */
 	public void initialize(){
-//		T = (ArrayList<Arc>) g.getArcs().clone();
+		T = (ArrayList<Arc>) g.getArcs().clone();
 		L = new ArrayList<Arc>();
-		U = new ArrayList<Arc>();
+		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
 		//V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
@@ -45,43 +45,45 @@ public class SimplexAlgorithm {
 		int nettoB = 0;
 		int maxCost = Integer.MIN_VALUE;
 		for(Vertex v : g.getVertices()){
-			if(v != k){ //Abfrage damit k nicht mitüberprüft wird
+			if(!v.equals(k)){ //Abfrage damit k nicht mitüberprüft wird
 				nettoB = v.getFlow();
 				for(Arc a : g.getArcs()){
-					if(a.getTail() == v){
+					if(a.getTail().equals(v)){
 						nettoB = nettoB + a.getLow();
 						if(maxCost<a.getCost())
 							maxCost = a.getCost();
 					}
-					else if(a.getHead() == v){
+					else if(a.getHead().equals(v)){
 						nettoB = nettoB - a.getLow();
 						if(maxCost<a.getCost())
 							maxCost = a.getCost();
 					}
 				}
-			}
 			
-			if(nettoB < 0){
-				Arc a = new Arc(k,v);
-				a.setLow(0);
-				a.setCap(nettoB + 1);
-				int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
-				a.setCost(M);
-//				L.add(a.clone());
-			}
-			else{
-				Arc a = new Arc(v,k);
-				a.setLow(0);
-				a.setCap(nettoB + 1);
-				int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
-				a.setCost(M);
-//				L.add(a.clone());
+			
+				if(nettoB < 0){
+					Arc a = new Arc(k,v);
+					a.setLow(0);
+					a.setCap(nettoB + 1);
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
+					a.setCost(M);
+					L.add(a.clone());
+				}
+				else{
+					Arc a = new Arc(v,k);
+					a.setLow(0);
+					a.setCap(nettoB + 1);
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
+					a.setCost(M);
+					L.add(a.clone());
+				}
 			}
 		}
 		
-		//Clone und EqualsMethode für Arc und Vertex schreiben!
+		//Fluss x ermitteln
 	}
 
+	
 	/*
 	 * ToDo: 
 	 * 1. Initalisierung ein wenig fehlt noch, aber fast fertig. kann schonmal auf fehler überprüft werden.

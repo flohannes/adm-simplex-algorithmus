@@ -25,6 +25,18 @@ public class Vertex {
 		this.flow = flow;
 	}
 	
+	public boolean equals(Vertex v){
+		if(this.getId() == v.getId())
+			return true;
+		return false;
+	}
+	
+	public Vertex clone(){
+		Vertex v = new Vertex(this.id);
+		v.setFlow(this.flow);
+		return v;
+	}
+	
 	public String toString(){
 		return "n " + this.getId()+ " " + this.getFlow();
 	}
