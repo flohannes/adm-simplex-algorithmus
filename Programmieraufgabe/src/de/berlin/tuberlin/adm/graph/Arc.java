@@ -56,6 +56,20 @@ public class Arc {
 		this.cap = cap;
 	}
 	
+	public boolean equals(Arc a){
+		if(this.tail.equals(a.getTail()) && this.head.equals(a.getHead()))
+			return true;
+		return false;
+	}
+	
+	public Arc clone(){
+		Arc a = new Arc(this.tail.clone(), this.head.clone());
+		a.setCap(this.cap);
+		a.setLow(this.low);
+		a.setCost(this.cost);
+		return a;
+	}
+	
 	public String toString(){
 		return "a "+ this.tail.getId() + " " + this.head.getId() + " " + this.getLow() + " " + this.getCap() + " " + this.getCost();
 	}
