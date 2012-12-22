@@ -1,17 +1,35 @@
 package de.berlin.tuberlin.adm.algorithms;
 
 import de.berlin.tuberlin.adm.graph.Graph;
+import de.berlin.tuberlin.adm.graph.Vertex;
 
 public class SimplexAlgorithm {
 
 	private Graph g;
+	private Stopwatch stopwatch;
 
 	public SimplexAlgorithm(Graph g) {
 		this.g = g;
+		this.stopwatch = new Stopwatch();
 	}
 
 	public void startOptimierung() {
-
+		stopwatch.start();
+		initialize();
+		//Hier kommen die restlichen Methoden hin
+		//...
+		
+		stopwatch.stop();
+	}
+	
+	public void initialize(){
+		//V' = V vereinigt k
+		Vertex k = new Vertex(g.getVertices().size() + 1);
+		k.setFlow(0);
+		g.addVertex(k);
+		
+		//A'
+		
 	}
 
 	/*
@@ -33,4 +51,8 @@ public class SimplexAlgorithm {
 	 * ausgeben lassen, wie schnell berechnet wurde. Denke, dass ist ein cooler
 	 * zusatz.
 	 */
+	
+	public Stopwatch getStopwatch(){
+		return stopwatch;
+	}
 }
