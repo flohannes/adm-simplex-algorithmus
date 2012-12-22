@@ -6,12 +6,20 @@ public class Graph {
 	
 	private ArrayList<Vertex> vertices;
 	private ArrayList<Arc> arcs;
-	private Vertex v;
-	private Vertex w;
 	
 	
 	public Graph(){
-		
+		vertices = new ArrayList<Vertex>();
+		arcs = new ArrayList<Arc>();
+	}
+	
+	public Vertex getVertexById(int id){
+		for(Vertex v: vertices){
+			if(id == v.getId()){
+				return v;
+			}
+		}
+		return null;
 	}
 	
 	public void addVertex(Vertex v){
@@ -36,22 +44,6 @@ public class Graph {
 
 	public void setArcs(ArrayList<Arc> arcs) {
 		this.arcs = arcs;
-	}
-
-	public Vertex getV() {
-		return v;
-	}
-
-	public void setV(Vertex v) {
-		this.v = v;
-	}
-
-	public Vertex getW() {
-		return w;
-	}
-
-	public void setW(Vertex w) {
-		this.w = w;
 	}
 
 }

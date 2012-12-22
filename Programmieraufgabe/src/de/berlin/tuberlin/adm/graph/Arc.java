@@ -6,8 +6,9 @@ public class Arc {
 	private Vertex tail;
 	private int cost;
 	private int low;
+	private int cap;
 	
-	public Arc (Vertex head, Vertex tail){
+	public Arc (Vertex tail, Vertex head){
 		this.head = head;
 		this.tail = tail;
 	}
@@ -43,6 +44,20 @@ public class Arc {
 
 	public void setLow(int low) {
 		this.low = low;
+	}
+
+
+	public int getCap() {
+		return cap;
+	}
+
+
+	public void setCap(int cap) {
+		this.cap = cap;
+	}
+	
+	public String toString(){
+		return "a "+ this.tail.getId() + " " + this.head.getId() + " " + this.getLow() + " " + this.getCap() + " " + this.getCost();
 	}
 
 }

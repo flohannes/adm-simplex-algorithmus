@@ -6,7 +6,7 @@ public class Vertex {
 
 	private Vector<Arc> arcs;
 	private int id;
-	private double flow;
+	private int flow;
 	
 	public Vertex(int id){
 		arcs = new Vector<Arc>();
@@ -29,11 +29,15 @@ public class Vertex {
 		this.id = id;
 	}
 
-	public double getFlow() {
+	public int getFlow() {
 		return flow;
 	}
 
-	public void setFlow(double flow) {
+	public void setFlow(int flow) {
 		this.flow = flow;
+	}
+	
+	public String toString(){
+		return "n " + this.getId()+ " " + this.getFlow();
 	}
 }
