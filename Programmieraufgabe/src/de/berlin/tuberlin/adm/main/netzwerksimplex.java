@@ -16,7 +16,7 @@ public class netzwerksimplex {
 		
 		//args[0] ist Eingabedatei
 		//mit Input sollen die Daten eingelesen werden und ein Graph zurück gegeben werden
-		Input input = new Input("gte_bad.200");
+		Input input = new Input("src/InputData/gte_bad.200");
 		
 		
 		//Ausführen von der Klasse SimplexAlgorithmus. ein Graph soll eingegeben werden und berechnet werden.
