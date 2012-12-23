@@ -19,17 +19,24 @@ public class Input {
 	// daraus aufgebaut werden.
 
 	public Input(String path) throws IOException{
-		graph = new Graph();
+		//graph = new Graph();
 		BufferedReader in = new BufferedReader(new FileReader(path));
 		String zeile = null;
 		zeile = in.readLine();
 		String[] inputString;
 		while ((zeile = in.readLine()) != null) {
 			inputString = zeile.split(" ");
-			if(inputString[0].startsWith("n")){			
-				Vertex v = new Vertex(Integer.parseInt(inputString[1]));
-				v.setFlow(Integer.parseInt(inputString[2]));
-				graph.addVertex(v);
+			
+			if(inputString[0].startsWith("p")){
+				graph = new Graph(Integer.parseInt(inputString[2]) ,
+									Integer.parseInt(inputString[3]));
+			}
+			else if(inputString[0].startsWith("n")){			
+				//Vertex v = new Vertex(Integer.parseInt(inputString[1]));
+				//v.setFlow(Integer.parseInt(inputString[2]));
+				//graph.addVertex(v);
+				graph.getVertexById(Integer.parseInt(inputString[1])).setFlow(Integer.parseInt(inputString[2]));
+
 			}
 			else if(inputString[0].startsWith("a")){
 				Arc a = new Arc(graph.getVertexById(Integer.parseInt(inputString[1])),graph.getVertexById(Integer.parseInt(inputString[2])));
@@ -48,4 +55,19 @@ public class Input {
 		return graph;
 	}
 
+	
+	
+	public static void main(String[] args){
+		
+		try {
+			Input r = new Input( "src/InputData/gte_bad.1160");
+			Vertex v = r.getGraph().getVertexById(27);
+			System.out.println(v.getFlow());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }
