@@ -18,6 +18,12 @@ public class Graph {
 	public Graph( int NumOfNodes, int NumOfArcs){
 		vertices = new ArrayList<Vertex>(NumOfNodes);
 		arcs = new ArrayList<Arc>(NumOfArcs);
+		
+		for( int i=0; i<NumOfNodes ;i++){
+			Vertex v = new Vertex( i );
+			v.setFlow(0);
+			this.addVertex(v);
+		}//jetzt brauch man in INput nur noch setFlow für die angegebenen Knoten aufrufen
 	}
 	
 	
