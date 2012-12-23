@@ -13,6 +13,16 @@ public class Graph {
 		arcs = new ArrayList<Arc>();
 	}
 	
+	
+	//neuer Konstruktor
+	public Graph( int NumOfNodes, int NumOfArcs){
+		vertices = new ArrayList<Vertex>(NumOfNodes);
+		arcs = new ArrayList<Arc>(NumOfArcs);
+	}
+	
+	
+	
+	
 	public Vertex getVertexById(int id){
 		for(Vertex v: vertices){
 			if(id == v.getId()){
@@ -24,6 +34,9 @@ public class Graph {
 	
 	public void addVertex(Vertex v){
 		this.vertices.add(v);
+		// so bräuchte man doch bei getVertexById nicht immer die ganze arraylist durchlaufen
+		//id = Stelle an der der Knoten gespeichert ist
+		//this.vertices.add(v.getId(),v);
 	}
 	
 	public void addArc(Arc a){
