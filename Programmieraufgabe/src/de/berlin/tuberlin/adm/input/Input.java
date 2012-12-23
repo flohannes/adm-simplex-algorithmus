@@ -36,6 +36,8 @@ public class Input {
 				a.setLow(Integer.parseInt(inputString[3]));
 				a.setCap(Integer.parseInt(inputString[4]));
 				a.setCost(Integer.parseInt(inputString[5]));
+				// add a
+				graph.addArc(a);
 			}
 
 		}
