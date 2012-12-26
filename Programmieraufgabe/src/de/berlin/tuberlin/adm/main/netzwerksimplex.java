@@ -5,6 +5,7 @@ import java.io.IOException;
 import de.berlin.tuberlin.adm.algorithms.SimplexAlgorithm;
 import de.berlin.tuberlin.adm.graph.Vertex;
 import de.berlin.tuberlin.adm.input.Input;
+import de.berlin.tuberlin.adm.output.Output;
 
 public class netzwerksimplex {
 
@@ -20,11 +21,12 @@ public class netzwerksimplex {
 		
 		
 		//Ausführen von der Klasse SimplexAlgorithmus. ein Graph soll eingegeben werden und berechnet werden.
-//		SimplexAlgorithm simplex = new SimplexAlgorithm(input.getGraph());
+		SimplexAlgorithm simplex = new SimplexAlgorithm(input.getGraph());
 //		simplex.startOptimierung();
-//		System.out.println("Time in ms: " + simplex.getStopwatch().getElapsedTime());
+		System.out.println("Time in ms: " + simplex.getStopwatch().getElapsedTime());
 		
 		//args[1] ist Ausgabedatei und bekommt von SimplexAlgorithmus das Ergebnis, welches in eine Ausgabedatei geschrieben werden soll.
+		Output output = new Output("src/OutputData", simplex.getG());
 	}
 
 }

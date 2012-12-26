@@ -105,4 +105,8 @@ public class SimplexAlgorithm {
 	public Stopwatch getStopwatch(){
 		return stopwatch;
 	}
+	
+	public Graph getG() {
+		return g;
+	}
 }
