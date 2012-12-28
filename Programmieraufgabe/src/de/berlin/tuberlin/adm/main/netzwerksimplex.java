@@ -18,7 +18,8 @@ public class netzwerksimplex {
 		//args[0] ist Eingabedatei
 		//mit Input sollen die Daten eingelesen werden und ein Graph zurück gegeben werden
 		Input input = new Input("src/InputData/gte_bad.200");
-		
+		System.out.println("Time in ms: " + input.getStopwatch().getElapsedTime());
+
 		
 		//Ausführen von der Klasse SimplexAlgorithmus. ein Graph soll eingegeben werden und berechnet werden.
 		SimplexAlgorithm simplex = new SimplexAlgorithm(input.getGraph());
