@@ -20,7 +20,7 @@ public class Graph {
 		arcs = new ArrayList<Arc>(NumOfArcs);
 		
 		for( int i=0; i<NumOfNodes ;i++){
-			Vertex v = new Vertex( i );
+			Vertex v = new Vertex( i+1 );
 			v.setFlow(0);
 			this.addVertex(v);
 		}//jetzt brauch man in INput nur noch setFlow für die angegebenen Knoten aufrufen
@@ -47,8 +47,8 @@ public class Graph {
 	
 	public void addArc(Arc a){
 		this.arcs.add(a);
-		this.vertices.get(a.getTail().getId()).addArcDeltaMinus(a);
-		this.vertices.get(a.getHead().getId()).addArcDeltaPlus(a);
+		this.vertices.get(a.getTail().getId()-1).addArcDeltaPlus(a); // -1 damit wir auch den 0-ten
+		this.vertices.get(a.getHead().getId()-1).addArcDeltaMinus(a);//Index benutzen
 	}
 
 	public ArrayList<Vertex> getVertices() {
@@ -67,4 +67,20 @@ public class Graph {
 		this.arcs = arcs;
 	}
 
+	
+	public String toString(){
+		String output = "Knoten v; [Knoten u mit (v,u) als Kante]\n";
+		String head = "";
+		for( Vertex v : vertices){
+			output = output + v.getId();
+			head= "; [";
+			for( Arc a : v.getDeltaPlus()){
+				 head= head + a.getHead().getId()+ "; ";
+			}
+			if (head.length() > 3) head = head.substring(0, head.length()-2);
+			head = head+"] ";
+			output = output + head + "\n";
+		}
+		return output;
+	}
 }

@@ -11,6 +11,8 @@ public class Vertex {
 	
 	public Vertex(int id){
 		this.id = id;
+		this.deltaMinus = new ArrayList<Arc>();
+		this.deltaPlus = new ArrayList<Arc>();
 	}
 
 	public int getId() {
