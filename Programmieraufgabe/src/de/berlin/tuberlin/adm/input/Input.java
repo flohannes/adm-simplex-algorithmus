@@ -1,24 +1,26 @@
 package de.berlin.tuberlin.adm.input;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import de.berlin.tuberlin.adm.algorithms.Stopwatch;
 import de.berlin.tuberlin.adm.graph.Arc;
 import de.berlin.tuberlin.adm.graph.Graph;
-import de.berlin.tuberlin.adm.graph.Vertex;
 
 public class Input {
 	
 	private Graph graph;
-	
+	private Stopwatch stopwatch;
 
 	// Hier müsste mit einem InputStreamReader ein Datensatz eingelesen werden.
 	// Dabei muss zeile für zeile Daten übernommen werden und dann ein graph
 	// daraus aufgebaut werden.
 
 	public Input(String path) throws IOException{
+		stopwatch = new Stopwatch();
+		stopwatch.start();
+		
 		//graph = new Graph();
 		BufferedReader in = new BufferedReader(new FileReader(path));
 		String zeile = null;
@@ -51,23 +53,32 @@ public class Input {
 
 		}
 		in.close();
+		
+		stopwatch.stop();
 	}
 
 	public Graph getGraph() {
 		return graph;
 	}
+	
+	public Stopwatch getStopwatch(){
+		return stopwatch;
+	}
 
 	
 	
+	/**
+	 * Tests for class Input
+	 * @param args
+	 */
 	public static void main(String[] args){
 		
 		try {
 			Input r = new Input( "src/InputData/test");
+			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
 //			Vertex v = r.getGraph().getVertexById(27);
 			System.out.println(r.getGraph().toString());
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

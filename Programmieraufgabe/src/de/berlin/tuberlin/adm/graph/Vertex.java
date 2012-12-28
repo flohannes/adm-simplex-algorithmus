@@ -19,10 +19,6 @@ public class Vertex {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public int getFlow() {
 		return flow;
 	}
@@ -35,18 +31,10 @@ public class Vertex {
 		return deltaPlus;
 	}
 
-	public void setDeltaPlus(ArrayList<Arc> deltaPlus) {
-		this.deltaPlus = deltaPlus;
-	}
-
 	public ArrayList<Arc> getDeltaMinus() {
 		return deltaMinus;
 	}
 
-	public void setDeltaMinus(ArrayList<Arc> deltaMinus) {
-		this.deltaMinus = deltaMinus;
-	}
-	
 	public void addArcDeltaPlus(Arc a){
 		deltaPlus.add(a);
 	}
