@@ -35,6 +35,7 @@ public class Input {
 				//Vertex v = new Vertex(Integer.parseInt(inputString[1]));
 				//v.setFlow(Integer.parseInt(inputString[2]));
 				//graph.addVertex(v);
+				//System.out.println(Integer.parseInt(inputString[1]) + ";" + Integer.parseInt(inputString[2]) );
 				graph.getVertexById(Integer.parseInt(inputString[1])).setFlow(Integer.parseInt(inputString[2]));
 
 			}
@@ -44,6 +45,7 @@ public class Input {
 				a.setCap(Integer.parseInt(inputString[4]));
 				a.setCost(Integer.parseInt(inputString[5]));
 				// add a
+				//System.out.println(a.toString());
 				graph.addArc(a);
 			}
 
@@ -60,9 +62,9 @@ public class Input {
 	public static void main(String[] args){
 		
 		try {
-			Input r = new Input( "src/InputData/gte_bad.1160");
-			Vertex v = r.getGraph().getVertexById(27);
-			System.out.println(v.getFlow());
+			Input r = new Input( "src/InputData/test");
+//			Vertex v = r.getGraph().getVertexById(27);
+			System.out.println(r.getGraph().toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
