@@ -7,13 +7,6 @@ public class Graph {
 	private ArrayList<Vertex> vertices;
 	private ArrayList<Arc> arcs;
 	
-	
-	public Graph(){
-		vertices = new ArrayList<Vertex>();
-		arcs = new ArrayList<Arc>();
-	}
-	
-	
 	//neuer Konstruktor
 	public Graph( int NumOfNodes, int NumOfArcs){
 		vertices = new ArrayList<Vertex>(NumOfNodes);
@@ -26,9 +19,7 @@ public class Graph {
 		}//jetzt brauch man in INput nur noch setFlow für die angegebenen Knoten aufrufen
 	}
 	
-	
-	
-	
+
 	public Vertex getVertexById(int id){
 		for(Vertex v: vertices){
 			if(id == v.getId()){
@@ -50,21 +41,19 @@ public class Graph {
 		this.vertices.get(a.getTail().getId()-1).addArcDeltaPlus(a); // -1 damit wir auch den 0-ten
 		this.vertices.get(a.getHead().getId()-1).addArcDeltaMinus(a);//Index benutzen
 	}
+	
+	public void removeArc(Arc a){
+		this.arcs.remove(a);						//wenn wir eine kante entfernen wollen
+		a.getHead().getDeltaPlus().remove(a);
+		a.getTail().getDeltaMinus().remove(a);
+	}
 
 	public ArrayList<Vertex> getVertices() {
 		return vertices;
 	}
 
-	public void setVertices(ArrayList<Vertex> vertices) {
-		this.vertices = vertices;
-	}
-
 	public ArrayList<Arc> getArcs() {
 		return arcs;
-	}
-
-	public void setArcs(ArrayList<Arc> arcs) {
-		this.arcs = arcs;
 	}
 
 	

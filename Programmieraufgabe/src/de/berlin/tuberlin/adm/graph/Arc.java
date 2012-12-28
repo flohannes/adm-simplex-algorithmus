@@ -13,7 +13,6 @@ public class Arc {
 		this.tail = tail;
 	}
 	
-	
 	public Vertex getHead() {
 		return head;
 	}
