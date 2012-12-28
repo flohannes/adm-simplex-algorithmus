@@ -47,6 +47,8 @@ public class Graph {
 	
 	public void addArc(Arc a){
 		this.arcs.add(a);
+		this.vertices.get(a.getTail().getId()).addArcDeltaMinus(a);
+		this.vertices.get(a.getHead().getId()).addArcDeltaPlus(a);
 	}
 
 	public ArrayList<Vertex> getVertices() {
