@@ -110,6 +110,8 @@ public class SimplexAlgorithm {
 				else s[i] =i+2;
 			}
 		}
+		
+		//Knotenpreise und reduzierte Kosten bestimmen
 	}
 
 	
