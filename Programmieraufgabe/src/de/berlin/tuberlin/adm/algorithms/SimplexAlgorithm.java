@@ -15,10 +15,23 @@ public class SimplexAlgorithm {
 	private ArrayList<Arc> T;
 	private ArrayList<Arc> L;
 	private ArrayList<Arc> U;
+	
+	private int NumberOfNodes;
+	
+	private int[] p;
+	private int[] d;
+	private int[] s;
+	
+	//für die oberen Kapazitäten der neun Kanten
 	final int inf = Integer.MAX_VALUE;
 
 	public SimplexAlgorithm(Graph g) {
 		this.g = g;
+		this.NumberOfNodes = g.getVertices().size() +1; //mit Knoten k
+		this.p = new int[NumberOfNodes];
+		this.d = new int[NumberOfNodes];
+		this.s = new int[NumberOfNodes];
+
 		this.stopwatch = new Stopwatch();
 	}
 
@@ -61,13 +74,13 @@ public class SimplexAlgorithm {
 							maxCost = a.getCost();	
 				}
 			
-			
 				if(nettoB < 0){
 					Arc a = new Arc(v,k);
 					a.setLow(0);
 					a.setCap(inf);
 					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
 					a.setCost(M);
+					a.setFlowX(-nettoB);	//Fluss x bestimmen
 					g.addArc(a);
 					T.add(a.clone());
 				}
@@ -77,13 +90,26 @@ public class SimplexAlgorithm {
 					a.setCap(inf);
 					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
 					a.setCost(M);
+					a.setFlowX(nettoB);		//Fluss x bestimmen
 					g.addArc(a);
 					T.add(a.clone());
 				}
 			}
 		}
 		
-		//Fluss x ermitteln
+		//an i-ter Stelle steht Knoten mit ID i+1
+		for( int i=0 ; i< NumberOfNodes ; i++){
+			if(i == NumberOfNodes-1){
+				p[i] = -1;	//k ist die Wurzel
+				d[i] = 1;
+				s[i] = 2;
+			}else{
+				p[i] = NumberOfNodes;
+				d[i] = 2;
+				if( i==0) s[i] = NumberOfNodes;
+				else s[i] =i+2;
+			}
+		}
 	}
 
 	

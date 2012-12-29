@@ -37,7 +37,6 @@ public class Input {
 				//Vertex v = new Vertex(Integer.parseInt(inputString[1]));
 				//v.setFlow(Integer.parseInt(inputString[2]));
 				//graph.addVertex(v);
-				//System.out.println(Integer.parseInt(inputString[1]) + ";" + Integer.parseInt(inputString[2]) );
 				graph.getVertexById(Integer.parseInt(inputString[1])).setFlow(Integer.parseInt(inputString[2]));
 
 			}
@@ -47,7 +46,8 @@ public class Input {
 				a.setCap(Integer.parseInt(inputString[4]));
 				a.setCost(Integer.parseInt(inputString[5]));
 				// add a
-				//System.out.println(a.toString());
+				//gehört quasi zum Initialisieren von Simplex
+				a.setFlowX(Integer.parseInt(inputString[3])); //setze Fluss auf min cap
 				graph.addArc(a);
 			}
 
