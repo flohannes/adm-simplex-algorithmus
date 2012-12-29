@@ -44,8 +44,8 @@ public class Graph {
 	
 	public void removeArc(Arc a){
 		this.arcs.remove(a);						//wenn wir eine kante entfernen wollen
-		a.getHead().getDeltaPlus().remove(a);
-		a.getTail().getDeltaMinus().remove(a);
+		a.getHead().getDeltaMinus().remove(a);
+		a.getTail().getDeltaPlus().remove(a);
 	}
 
 	public ArrayList<Vertex> getVertices() {

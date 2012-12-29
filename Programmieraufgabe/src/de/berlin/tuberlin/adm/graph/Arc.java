@@ -5,6 +5,7 @@ public class Arc {
 	private Vertex head;
 	private Vertex tail;
 	private int cost;
+	private int reducedCost;
 	private int low;
 	private int cap;
 	
@@ -69,8 +70,18 @@ public class Arc {
 		return a;
 	}
 	
+	public int getReducedCost() {
+		return reducedCost;
+	}
+
+	public void setReducedCost(int reducedCost) {
+		this.reducedCost = reducedCost;
+	}
+	
 	public String toString(){
 		return "a "+ this.tail.getId() + " " + this.head.getId() + " " + this.getLow() + " " + this.getCap() + " " + this.getCost();
 	}
+
+	
 
 }
