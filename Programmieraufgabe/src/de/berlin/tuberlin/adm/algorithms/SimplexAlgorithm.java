@@ -111,7 +111,20 @@ public class SimplexAlgorithm {
 			}
 		}
 		
-		//Knotenpreise und reduzierte Kosten bestimmen
+		//Knotenpreise und reduzierte Kosten in T
+		k.setPrice(0);
+		for( Arc a : k.getDeltaPlus()){
+			a.getHead().setPrice(a.getCost());
+			a.setReducedCost(a.getCost() - a.getHead().getPrice());
+		}
+		for(Arc a : k.getDeltaMinus()){
+			a.getTail().setPrice(-a.getCost());
+			a.setReducedCost(a.getCost() + a.getTail().getPrice());
+		}
+		//reduzierte Kosten in L
+		for(Arc a : L){
+			a.setReducedCost(a.getCost() + a.getTail().getPrice() - a.getHead().getPrice());
+		}
 	}
 
 	
