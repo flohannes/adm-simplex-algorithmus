@@ -1,10 +1,12 @@
 package de.berlin.tuberlin.adm.algorithms;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.berlin.tuberlin.adm.graph.Arc;
 import de.berlin.tuberlin.adm.graph.Graph;
 import de.berlin.tuberlin.adm.graph.Vertex;
+import de.berlin.tuberlin.adm.input.Input;
 
 public class SimplexAlgorithm {
 
@@ -13,6 +15,7 @@ public class SimplexAlgorithm {
 	private ArrayList<Arc> T;
 	private ArrayList<Arc> L;
 	private ArrayList<Arc> U;
+	final int inf = Integer.MAX_VALUE;
 
 	public SimplexAlgorithm(Graph g) {
 		this.g = g;
@@ -32,8 +35,8 @@ public class SimplexAlgorithm {
 	 * Step 1: Initalisierung
 	 */
 	public void initialize(){
-		T = (ArrayList<Arc>) g.getArcs().clone();
-		L = new ArrayList<Arc>();
+		L = (ArrayList<Arc>) g.getArcs().clone();
+		T = new ArrayList<Arc>();
 		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
 		//V' = V vereinigt k
@@ -47,35 +50,35 @@ public class SimplexAlgorithm {
 		for(Vertex v : g.getVertices()){
 			if(!v.equals(k)){ //Abfrage damit k nicht mitüberprüft wird
 				nettoB = v.getFlow();
-				for(Arc a : g.getArcs()){
-					if(a.getTail().equals(v)){
+				for(Arc a : v.getDeltaPlus()){
 						nettoB = nettoB + a.getLow();
 						if(maxCost<a.getCost())
-							maxCost = a.getCost();
-					}
-					else if(a.getHead().equals(v)){
+							maxCost = a.getCost();	
+				}
+				for( Arc a : v.getDeltaMinus()){
 						nettoB = nettoB - a.getLow();
 						if(maxCost<a.getCost())
-							maxCost = a.getCost();
-					}
+							maxCost = a.getCost();	
 				}
 			
 			
 				if(nettoB < 0){
-					Arc a = new Arc(k,v);
-					a.setLow(0);
-					a.setCap(nettoB + 1);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
-					a.setCost(M);
-					L.add(a.clone());
-				}
-				else{
 					Arc a = new Arc(v,k);
 					a.setLow(0);
-					a.setCap(nettoB + 1);
+					a.setCap(inf);
 					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
 					a.setCost(M);
-					L.add(a.clone());
+					g.addArc(a);
+					T.add(a.clone());
+				}
+				else{
+					Arc a = new Arc(k,v);
+					a.setLow(0);
+					a.setCap(inf);
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
+					a.setCost(M);
+					g.addArc(a);
+					T.add(a.clone());
 				}
 			}
 		}
@@ -108,5 +111,18 @@ public class SimplexAlgorithm {
 	
 	public Graph getG() {
 		return g;
+	}
+	
+	public static void main(String[] args) {
+		
+		try {
+			Input r = new Input( "src/InputData/test");
+//			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
+			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
+			sim.initialize();
+			System.out.println(sim.getG().toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
 }
