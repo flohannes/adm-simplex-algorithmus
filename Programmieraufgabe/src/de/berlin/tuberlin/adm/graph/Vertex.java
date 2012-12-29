@@ -6,8 +6,9 @@ public class Vertex {
 
 	private int id;
 	private int flow;
-	private ArrayList<Arc> deltaPlus;
-	private ArrayList<Arc> deltaMinus;
+	private int price;
+	private ArrayList<Arc> deltaPlus; //ausgehende Kanten
+	private ArrayList<Arc> deltaMinus; //eingehende Kanten
 	
 	public Vertex(int id){
 		this.id = id;
@@ -55,7 +56,18 @@ public class Vertex {
 		return v;
 	}
 	
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	
 	public String toString(){
 		return "n " + this.getId()+ " " + this.getFlow();
 	}
+
+	
 }
