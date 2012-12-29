@@ -8,6 +8,7 @@ public class Arc {
 	private int reducedCost;
 	private int low;
 	private int cap;
+	private int flowX;
 	
 	public Arc (Vertex tail, Vertex head){
 		this.head = head;
@@ -78,10 +79,17 @@ public class Arc {
 		this.reducedCost = reducedCost;
 	}
 	
+	
+	public int getFlowX() {
+		return flowX;
+	}
+
+	public void setFlowX(int flowX) {
+		this.flowX = flowX;
+	}
+	
 	public String toString(){
 		return "a "+ this.tail.getId() + " " + this.head.getId() + " " + this.getLow() + " " + this.getCap() + " " + this.getCost();
 	}
-
-	
 
 }
