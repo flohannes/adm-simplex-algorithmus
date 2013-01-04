@@ -2,6 +2,7 @@ package de.berlin.tuberlin.adm.algorithms;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.berlin.tuberlin.adm.graph.Arc;
 import de.berlin.tuberlin.adm.graph.Graph;
@@ -40,7 +41,7 @@ public class SimplexAlgorithm {
 		initialize();
 		//Hier kommen die restlichen Methoden hin
 		//...
-		
+		this.augmentieren(this.optimalitaetstest());
 		stopwatch.stop();
 	}
 	
@@ -126,7 +127,35 @@ public class SimplexAlgorithm {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice() - a.getHead().getPrice());
 		}
 	}
+	
+	private Arc optimalitaetstest(){
+		for(Arc a : L){
+			if(a.getReducedCost() < 0){
+				L.remove(a);
+				return a;
+			}
+		}
+		for(Arc a : U){
+			if(a.getReducedCost() > 0){
+				U.remove(a);
+				return a;
+			}
+		}
+		return null;
+	}
 
+	private void augmentieren(Arc e){
+		T.add(e);
+		List<Vertex> u = new ArrayList<Vertex>();
+		List<Vertex> v = new ArrayList<Vertex>();
+		u.add(e.getTail());
+		v.add(e.getHead());
+		int maxC = Math.abs(e.getFlowX() - e.getCap());
+		
+		
+	}
+
+	
 	
 	/*
 	 * ToDo: 
@@ -150,7 +179,7 @@ public class SimplexAlgorithm {
 		return stopwatch;
 	}
 	
-	public Graph getG() {
+	public Graph getGraph() {
 		return g;
 	}
 	
@@ -161,7 +190,7 @@ public class SimplexAlgorithm {
 //			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			sim.initialize();
-			System.out.println(sim.getG().toString());
+			System.out.println(sim.getGraph().toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	

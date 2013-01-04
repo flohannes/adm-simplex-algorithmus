@@ -2,13 +2,15 @@ package de.berlin.tuberlin.adm.graph;
 
 public class Arc {
 
-	private Vertex head;
-	private Vertex tail;
+	//(u,v)
+	private Vertex head; // v
+	private Vertex tail; //u
 	private int cost;
 	private int reducedCost;
 	private int low;
 	private int cap;
 	private int flowX;
+	
 	
 	public Arc (Vertex tail, Vertex head){
 		this.head = head;
