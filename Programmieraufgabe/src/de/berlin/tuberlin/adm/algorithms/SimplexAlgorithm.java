@@ -150,7 +150,29 @@ public class SimplexAlgorithm {
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
 		v.add(e.getHead());
-		int maxC = Math.abs(e.getFlowX() - e.getCap());
+		
+		int maxC;
+		if(e.getReducedCost() < 0){ //e ist aus L
+			maxC = Math.abs(e.getFlowX() - e.getCap());
+			int i = 0;
+			int j = 0;
+			while(!(u.get(i).equals(v.get(j)))){
+				if(this.d[u.get(i).getId()-1] != this.d[v.get(j).getId()-1]){
+					u.add(g.getVertexById(p[u.get(i).getId()-1]));
+					i++;
+				}
+				else{
+					u.add(g.getVertexById(p[u.get(i).getId()-1]));
+					i++;
+					v.add(g.getVertexById(p[v.get(j).getId()-1]));
+					j++;
+				}
+			}
+		}
+		else{// aus U
+			maxC = Math.abs(e.getFlowX() - e.getLow());
+		}
+		
 		
 		
 	}

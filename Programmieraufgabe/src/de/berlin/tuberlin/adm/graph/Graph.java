@@ -6,7 +6,7 @@ public class Graph {
 	
 	private ArrayList<Vertex> vertices;
 	private ArrayList<Arc> arcs;
-	
+	private int maxCost;
 	//neuer Konstruktor
 	public Graph( int NumOfNodes, int NumOfArcs){
 		vertices = new ArrayList<Vertex>(NumOfNodes);
