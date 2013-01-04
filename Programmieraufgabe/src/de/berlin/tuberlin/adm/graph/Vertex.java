@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Vertex {
 
+	
 	private int id;
-	private int flow;
-	private int price;
+	private int flow;  // bi mit i aus V
+	private int price; // yi mit i aus V
 	private ArrayList<Arc> deltaPlus; //ausgehende Kanten
 	private ArrayList<Arc> deltaMinus; //eingehende Kanten
 	

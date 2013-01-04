@@ -23,7 +23,7 @@ public class SimplexAlgorithm {
 	private int[] d;
 	private int[] s;
 	
-	//für die oberen Kapazitäten der neun Kanten
+	//fuer die oberen Kapazitaeten der neun Kanten
 	final int inf = Integer.MAX_VALUE;
 
 	public SimplexAlgorithm(Graph g) {
@@ -49,8 +49,8 @@ public class SimplexAlgorithm {
 	 * Step 1: Initalisierung
 	 */
 	public void initialize(){
-		L = (ArrayList<Arc>) g.getArcs().clone();
-		T = new ArrayList<Arc>();
+		L = (ArrayList<Arc>) g.getArcs().clone(); // Wir schreiben erstmal alle Boegen in L
+		T = new ArrayList<Arc>(); 
 		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
 		//V' = V vereinigt k
@@ -60,10 +60,10 @@ public class SimplexAlgorithm {
 		
 		//A'
 		int nettoB = 0;
-		int maxCost = Integer.MIN_VALUE;
+		int maxCost = Integer.MIN_VALUE; // Genutzt zur Berechnung von M entsprechend (7.27)
 		for(Vertex v : g.getVertices()){
-			if(!v.equals(k)){ //Abfrage damit k nicht mitüberprüft wird
-				nettoB = v.getFlow();
+			if(!v.equals(k)){ //Abfrage damit k nicht mitueberprueft wird
+				nettoB = v.getFlow(); // Nettobedarf entsprechend (7.26) 
 				for(Arc a : v.getDeltaPlus()){
 						nettoB = nettoB + a.getLow();
 						if(maxCost<a.getCost())
@@ -75,11 +75,11 @@ public class SimplexAlgorithm {
 							maxCost = a.getCost();	
 				}
 			
-				if(nettoB < 0){
+				if(nettoB < 0){ // Hinzufuegen von Boegen 
 					Arc a = new Arc(v,k);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);  // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(-nettoB);	//Fluss x bestimmen
 					g.addArc(a);
@@ -89,7 +89,7 @@ public class SimplexAlgorithm {
 					Arc a = new Arc(k,v);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost); // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(nettoB);		//Fluss x bestimmen
 					g.addArc(a);
@@ -181,9 +181,9 @@ public class SimplexAlgorithm {
 	
 	/*
 	 * ToDo: 
-	 * 1. Initalisierung ein wenig fehlt noch, aber fast fertig. kann schonmal auf fehler überprüft werden.
+	 * 1. Initalisierung ein wenig fehlt noch, aber fast fertig. kann schonmal auf fehler ueberprueft werden.
 	 * 2. Berechnung der Knotenpreise 
-	 * 3. Optimalitätstest 
+	 * 3. Optimalitaetstest 
 	 * 4. Pricing 
 	 * 5. Augmentieren 
 	 * 6. Update

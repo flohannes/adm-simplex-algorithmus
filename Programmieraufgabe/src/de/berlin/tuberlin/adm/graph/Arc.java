@@ -2,14 +2,14 @@ package de.berlin.tuberlin.adm.graph;
 
 public class Arc {
 
-	//(u,v)
-	private Vertex head; // v
-	private Vertex tail; //u
-	private int cost;
-	private int reducedCost;
-	private int low;
-	private int cap;
-	private int flowX;
+	// Bogen a = (u,v), mit u,v aus V
+	private Vertex head; // v aus V
+	private Vertex tail; // u aus V
+	private int cost; // c(a)
+	private int reducedCost; //c^- (a)
+	private int low; // l(a)
+	private int cap; // u(a)
+	private int flowX; // x(a)
 	
 	
 	public Arc (Vertex tail, Vertex head){
