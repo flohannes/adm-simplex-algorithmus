@@ -27,7 +27,7 @@ public class netzwerksimplex {
 		System.out.println("Time in ms: " + simplex.getStopwatch().getElapsedTime());
 		
 		//args[1] ist Ausgabedatei und bekommt von SimplexAlgorithmus das Ergebnis, welches in eine Ausgabedatei geschrieben werden soll.
-		Output output = new Output("src/OutputData", simplex.getG());
+		Output output = new Output("src/OutputData", simplex.getGraph());
 	}
 
 }

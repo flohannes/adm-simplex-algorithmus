@@ -21,12 +21,7 @@ public class Graph {
 	
 
 	public Vertex getVertexById(int id){
-		for(Vertex v: vertices){
-			if(id == v.getId()){
-				return v;
-			}
-		}
-		return null;
+		return vertices.get(id-1);
 	}
 	
 	public void addVertex(Vertex v){
