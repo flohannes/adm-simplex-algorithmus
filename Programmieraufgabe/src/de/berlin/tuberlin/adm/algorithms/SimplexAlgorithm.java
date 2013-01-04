@@ -153,8 +153,8 @@ public class SimplexAlgorithm {
 		u.add(e.getTail());
 		v.add(e.getHead());
 		
-		int maxC;
-		if(e.getReducedCost() < 0){ //e ist aus L
+		int maxC = Integer.MIN_VALUE;
+		if(d[u.get(0).getId()-1] > d[v.get(0).getId()-1]){
 			maxC = Math.abs(e.getFlowX() - e.getCap());
 			int i = 0;
 			int j = 0;
@@ -170,8 +170,28 @@ public class SimplexAlgorithm {
 					j++;
 				}
 			}
+			v.remove(v.size()-1); //wird geloescht fuer den Weg	
+		}else{
+			maxC = Math.abs(e.getFlowX() - e.getCap());
+			int i = 0;
+			int j = 0;
+			while(!(u.get(i).equals(v.get(j)))){ //Kreis rekonstruieren
+				if(this.d[u.get(i).getId()-1] != this.d[v.get(j).getId()-1]){
+					v.add(g.getVertexById(p[v.get(j).getId()-1]));
+					j++;
+				}
+				else{
+					u.add(g.getVertexById(p[u.get(i).getId()-1]));
+					i++;
+					v.add(g.getVertexById(p[v.get(j).getId()-1]));
+					j++;
+				}
+			}
 			v.remove(v.size()-1); //wird geloescht fuer den Weg
-			
+		}
+		
+		
+		if(e.getReducedCost() < 0){ //e ist aus L
 			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
 				Arc a = v.get(p).getArc(v.get(p+1));
 				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
@@ -212,10 +232,112 @@ public class SimplexAlgorithm {
 			
 		}
 		else{// e ist aus U
-			maxC = Math.abs(e.getFlowX() - e.getLow());
+			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
+				Arc a = v.get(p).getArc(v.get(p+1));
+				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
+					if(maxC > a.getFlowX()- a.getLow()){
+						maxC = a.getFlowX()- a.getLow();
+					}
+				}
+				else{ //Rueckwaertsbogen
+					if(maxC > a.getCap() - a.getFlowX()){
+						maxC = a.getCap() - a.getFlowX();
+					}
+				}
+			}
+			for(int p = 0; p<u.size()-1; p++){ //weiterhin maxC finden. Weg von u0 bis un durchlafen
+				Arc a = u.get(p).getArc(u.get(p+1));
+				if(a.getHead().equals(u.get(p))){
+					if(maxC > a.getFlowX() - a.getLow()){
+						maxC = a.getFlowX() - a.getLow();
+					}
+				}
+				else{
+					if(maxC > a.getCap() - a.getFlowX()){
+						maxC = a.getCap() - a.getFlowX();
+					}
+				}
+			}
+			Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+			if(lastA.getHead().equals(u.get(u.size()-1))){
+				if(maxC > lastA.getFlowX() - lastA.getLow()){
+					maxC = lastA.getFlowX() - lastA.getLow();
+				}
+			}
+			else{
+				if(maxC > lastA.getCap() - lastA.getFlowX()){
+					maxC = lastA.getCap() - lastA.getFlowX();
+				}
+			}
 		}
 		
 		
+		
+		/**
+		 * Augmentieren: 
+		 * Nochmal den Kreis durchgehen und schauen obs in U oder L ist.
+		 */
+		if(e.getReducedCost() < 0){ //e ist aus L
+			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
+				Arc a = v.get(p).getArc(v.get(p+1));
+				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
+					a.setFlowX(a.getFlowX()+maxC);
+				}
+				else{ //Rueckwaertsbogen
+					a.setFlowX(a.getFlowX()-maxC);
+				}
+			}
+			for(int p = 0; p<u.size()-1; p++){ //weiterhin maxC finden. Weg von u0 bis un durchlafen
+				Arc a = u.get(p).getArc(u.get(p+1));
+				if(a.getHead().equals(u.get(p))){
+					a.setFlowX(a.getFlowX()+maxC);
+				}
+				else{
+					a.setFlowX(a.getFlowX()-maxC);
+				}
+			}
+			Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+			if(lastA.getHead().equals(u.get(u.size()-1))){
+				lastA.setFlowX(lastA.getFlowX()+maxC);
+			}
+			else{
+				lastA.setFlowX(lastA.getFlowX()-maxC);
+			}
+			
+		}
+		else{// e ist aus U
+			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
+				Arc a = v.get(p).getArc(v.get(p+1));
+				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
+					a.setFlowX(a.getFlowX()-maxC);
+				}
+				else{ //Rueckwaertsbogen
+					a.setFlowX(a.getFlowX()+maxC);
+				}
+			}
+			for(int p = 0; p<u.size()-1; p++){ //weiterhin maxC finden. Weg von u0 bis un durchlafen
+				Arc a = u.get(p).getArc(u.get(p+1));
+				if(a.getHead().equals(u.get(p))){
+					a.setFlowX(a.getFlowX()-maxC);
+				}
+				else{
+					a.setFlowX(a.getFlowX()+maxC);
+				}
+			}
+			Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+			if(lastA.getHead().equals(u.get(u.size()-1))){
+				lastA.setFlowX(lastA.getFlowX()-maxC);
+			}
+			else{
+				lastA.setFlowX(lastA.getFlowX()+maxC);
+			}
+		}
+		
+		
+		
+		/*
+		 * Baumloesung aktualisieren
+		 */
 		
 	}
 
