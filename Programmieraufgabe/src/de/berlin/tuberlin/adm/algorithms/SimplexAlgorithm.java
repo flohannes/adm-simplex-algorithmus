@@ -152,7 +152,7 @@ public class SimplexAlgorithm {
 			maxC = Math.abs(e.getFlowX() - e.getCap());
 			int i = 0;
 			int j = 0;
-			while(!(u.get(i).equals(v.get(j)))){
+			while(!(u.get(i).equals(v.get(j)))){ //Kreis rekonstruieren
 				if(this.d[u.get(i).getId()-1] != this.d[v.get(j).getId()-1]){
 					u.add(g.getVertexById(p[u.get(i).getId()-1]));
 					i++;
@@ -164,8 +164,48 @@ public class SimplexAlgorithm {
 					j++;
 				}
 			}
+			v.remove(v.size()-1); //wird geloescht fuer den Weg
+			
+			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
+				Arc a = v.get(p).getArc(v.get(p+1));
+				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
+					if(maxC > a.getCap() - a.getFlowX()){
+						maxC = a.getCap() - a.getFlowX();
+					}
+				}
+				else{ //Rueckwaertsbogen
+					if(maxC > a.getFlowX() - a.getLow()){
+						maxC = a.getFlowX() - a.getLow();
+					}
+				}
+			}
+			for(int p = 0; p<u.size()-1; p++){ //weiterhin maxC finden. Weg von u0 bis un durchlafen
+				Arc a = u.get(p).getArc(u.get(p+1));
+				if(a.getHead().equals(u.get(p))){
+					if(maxC > a.getCap() - a.getFlowX()){
+						maxC = a.getCap() - a.getFlowX();
+					}
+				}
+				else{
+					if(maxC > a.getFlowX() - a.getLow()){
+						maxC = a.getFlowX() - a.getLow();
+					}
+				}
+			}
+			Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+			if(lastA.getHead().equals(u.get(u.size()-1))){
+				if(maxC > lastA.getCap() - lastA.getFlowX()){
+					maxC = lastA.getCap() - lastA.getFlowX();
+				}
+			}
+			else{
+				if(maxC > lastA.getFlowX() - lastA.getLow()){
+					maxC = lastA.getFlowX() - lastA.getLow();
+				}
+			}
+			
 		}
-		else{// aus U
+		else{// e ist aus U
 			maxC = Math.abs(e.getFlowX() - e.getLow());
 		}
 		

@@ -51,6 +51,20 @@ public class Vertex {
 		return false;
 	}
 	
+	public Arc getArc(Vertex v){
+		for(Arc a : this.deltaMinus){
+			if(a.getTail().equals(v)){
+				return a;
+			}
+		}
+		for(Arc a : this.deltaPlus){
+			if(a.getHead().equals(v)){
+				return a;
+			}
+		}
+		return null;
+	}
+	
 	public Vertex clone(){
 		Vertex v = new Vertex(this.id);
 		v.setFlow(this.flow);
