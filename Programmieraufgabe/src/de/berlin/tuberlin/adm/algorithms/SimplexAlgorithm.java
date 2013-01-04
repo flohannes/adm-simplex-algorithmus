@@ -53,6 +53,8 @@ public class SimplexAlgorithm {
 		T = new ArrayList<Arc>(); 
 		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
+		int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost());  // M entsprechend (7.27)
+		
 		//V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
 		k.setFlow(0);
@@ -75,7 +77,7 @@ public class SimplexAlgorithm {
 					Arc a = new Arc(v,k);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost());  // M entsprechend (7.27)
+//					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost());  // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(-nettoB);	//Fluss x bestimmen
 					g.addArc(a);
@@ -85,7 +87,7 @@ public class SimplexAlgorithm {
 					Arc a = new Arc(k,v);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost()); // M entsprechend (7.27)
+//					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost()); // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(nettoB);		//Fluss x bestimmen
 					g.addArc(a);
@@ -95,11 +97,11 @@ public class SimplexAlgorithm {
 		}
 		
 		//an i-ter Stelle steht Knoten mit ID i+1
-		for( int i=0 ; i< NumberOfNodes ; i++){
+		for( int i=0 ; i< NumberOfNodes ; i++){ // Initialisierung des Baumes mit Wurzel k, alle anderen Knoten Kind von k
 			if(i == NumberOfNodes-1){
-				p[i] = -1;	//k ist die Wurzel
-				d[i] = 1;
-				s[i] = 2;
+				p[i] = -1;	//k ist die Wurzel (p = Predecessor)
+				d[i] = 1; // d = Depth
+				s[i] = 2; // s = successor
 			}else{
 				p[i] = NumberOfNodes;
 				d[i] = 2;
@@ -111,12 +113,16 @@ public class SimplexAlgorithm {
 		//Knotenpreise und reduzierte Kosten in T
 		k.setPrice(0);
 		for( Arc a : k.getDeltaPlus()){
-			a.getHead().setPrice(a.getCost());
-			a.setReducedCost(a.getCost() - a.getHead().getPrice());
+//			a.getHead().setPrice(a.getCost()); // immer M
+//			a.setReducedCost(a.getCost() - a.getHead().getPrice()); // immer 0
+			a.getHead().setPrice(M); // immer MaxCost
+			a.setReducedCost(0);
 		}
 		for(Arc a : k.getDeltaMinus()){
-			a.getTail().setPrice(-a.getCost());
-			a.setReducedCost(a.getCost() + a.getTail().getPrice());
+//			a.getTail().setPrice(-a.getCost()); // immer -M
+//			a.setReducedCost(a.getCost() + a.getTail().getPrice()); // immer 0
+			a.getHead().setPrice(-M);
+			a.setReducedCost(0);
 		}
 		//reduzierte Kosten in L
 		for(Arc a : L){

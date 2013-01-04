@@ -13,8 +13,8 @@ public class Input {
 	private Graph graph;
 	private Stopwatch stopwatch;
 
-	// Hier müsste mit einem InputStreamReader ein Datensatz eingelesen werden.
-	// Dabei muss zeile für zeile Daten übernommen werden und dann ein graph
+	// Hier muesste mit einem InputStreamReader ein Datensatz eingelesen werden.
+	// Dabei muss zeile fuer zeile Daten uebernommen werden und dann ein graph
 	// daraus aufgebaut werden.
 
 	public Input(String path) throws IOException{
@@ -46,7 +46,7 @@ public class Input {
 				a.setCap(Integer.parseInt(inputString[4]));
 				a.setCost(Integer.parseInt(inputString[5]));
 				// add a
-				//gehört quasi zum Initialisieren von Simplex
+				//gehoert quasi zum Initialisieren von Simplex
 				a.setFlowX(Integer.parseInt(inputString[3])); //setze Fluss auf min cap
 				graph.addArc(a);
 				
