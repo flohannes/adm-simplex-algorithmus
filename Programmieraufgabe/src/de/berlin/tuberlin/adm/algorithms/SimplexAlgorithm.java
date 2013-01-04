@@ -60,26 +60,22 @@ public class SimplexAlgorithm {
 		
 		//A'
 		int nettoB = 0;
-		int maxCost = Integer.MIN_VALUE; // Genutzt zur Berechnung von M entsprechend (7.27)
 		for(Vertex v : g.getVertices()){
 			if(!v.equals(k)){ //Abfrage damit k nicht mitueberprueft wird
 				nettoB = v.getFlow(); // Nettobedarf entsprechend (7.26) 
 				for(Arc a : v.getDeltaPlus()){
-						nettoB = nettoB + a.getLow();
-						if(maxCost<a.getCost())
-							maxCost = a.getCost();	
+						nettoB = nettoB + a.getLow();	
 				}
 				for( Arc a : v.getDeltaMinus()){
 						nettoB = nettoB - a.getLow();
-						if(maxCost<a.getCost())
-							maxCost = a.getCost();	
+							
 				}
 			
 				if(nettoB < 0){ // Hinzufuegen von Boegen 
 					Arc a = new Arc(v,k);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost);  // M entsprechend (7.27)
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost());  // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(-nettoB);	//Fluss x bestimmen
 					g.addArc(a);
@@ -89,7 +85,7 @@ public class SimplexAlgorithm {
 					Arc a = new Arc(k,v);
 					a.setLow(0);
 					a.setCap(inf);
-					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * maxCost); // M entsprechend (7.27)
+					int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost()); // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(nettoB);		//Fluss x bestimmen
 					g.addArc(a);
