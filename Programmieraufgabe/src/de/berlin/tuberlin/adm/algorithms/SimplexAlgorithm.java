@@ -338,9 +338,39 @@ public class SimplexAlgorithm {
 		/*
 		 * Baumloesung aktualisieren
 		 */
+		Arc f = this.findF(u, v);
 		
+		T.remove(f);
+		T.add(e);
+		
+		L.remove(e);
+		if(f.getFlowX() == f.getLow())
+			L.add(f);
+		
+		U.remove(e);
+		if(f.getFlowX() == f.getCap())
+			U.add(f);
+		
+		//p,d und s anpassen
 	}
 
+	private Arc findF(List<Vertex> u, List<Vertex> v){
+		for(int i =0; i< v.size()-1;i++){
+			Arc a = v.get(i).getArc(v.get(i+1));
+			if(a.getFlowX()==a.getCap() || a.getFlowX() == a.getLow())
+				return a;
+		}
+		for(int i = 0; i<u.size()-1;i++){
+			Arc a = u.get(i).getArc(u.get(i+1));
+			if(a.getFlowX()==a.getCap() || a.getFlowX() == a.getLow())
+				return a;
+		}
+		Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+		if(lastA.getFlowX()==lastA.getCap() || lastA.getFlowX() == lastA.getLow())
+			return lastA;
+		
+		return null;
+	}
 	
 	
 	/*
@@ -373,10 +403,12 @@ public class SimplexAlgorithm {
 		
 		try {
 			Input r = new Input( "src/InputData/test");
-//			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
-			sim.initialize();
 			System.out.println(sim.getGraph().toString());
+
+			sim.startOptimierung();
+			System.out.println(sim.getGraph().toString());
+			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
