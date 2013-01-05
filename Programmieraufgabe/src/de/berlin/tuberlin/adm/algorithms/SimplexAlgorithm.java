@@ -351,7 +351,7 @@ public class SimplexAlgorithm {
 		if(f.getFlowX() == f.getCap())
 			U.add(f);
 		
-		//p,d und s anpassen
+		//p,d und s anpassen und Knotenpreise
 	}
 
 	private Arc findF(List<Vertex> u, List<Vertex> v){
@@ -373,6 +373,21 @@ public class SimplexAlgorithm {
 	}
 	
 	
+	private void updateKnotenpreise(){
+		
+	}
+	
+	private void updateS(){
+		
+	}
+	
+	private void updateP(){
+		
+	}
+	
+	private void updateD(){
+		
+	}
 	/*
 	 * ToDo: 
 	 * 1. Initalisierung ein wenig fehlt noch, aber fast fertig. kann schonmal auf fehler ueberprueft werden.
