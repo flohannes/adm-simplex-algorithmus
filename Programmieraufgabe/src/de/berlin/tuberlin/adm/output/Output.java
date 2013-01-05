@@ -22,7 +22,7 @@ public class Output {
 		//weg angeben, zur zeit noch alle Kanten ausgaben:
 		for(Arc a : graph.getArcs()){
 			if(!(a.getTail() == null || a.getHead() == null || a==null )){
-				out.write(a.getTail().getId() + " " + a.getHead().getId() + " " + a.getCost() + eol);
+				out.write(a.getTail().getId() + " " + a.getHead().getId() + " " + a.getFlowX() + eol);
 			}
 		}	
 		
