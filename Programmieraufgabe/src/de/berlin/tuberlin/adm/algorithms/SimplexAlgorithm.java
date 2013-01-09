@@ -13,9 +13,9 @@ public class SimplexAlgorithm {
 
 	private Graph g;
 	private Stopwatch stopwatch;
-	private ArrayList<Arc> T;
-	private ArrayList<Arc> L;
-	private ArrayList<Arc> U;
+	public ArrayList<Arc> T;
+	public ArrayList<Arc> L;
+	public ArrayList<Arc> U;
 	
 	private int NumberOfNodes;
 	
@@ -121,7 +121,7 @@ public class SimplexAlgorithm {
 		for(Arc a : k.getDeltaMinus()){
 //			a.getTail().setPrice(-a.getCost()); // immer -M
 //			a.setReducedCost(a.getCost() + a.getTail().getPrice()); // immer 0
-			a.getHead().setPrice(-M);
+			a.getTail().setPrice(-M);
 			a.setReducedCost(0);
 		}
 		//reduzierte Kosten in L
@@ -194,7 +194,7 @@ public class SimplexAlgorithm {
 		}
 		
 		
-		if(e.getReducedCost() < 0){ //e ist aus L
+		if(e.getReducedCost() < 0){//e ist aus L
 			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
 				Arc a = v.get(p).getArc(v.get(p+1));
 				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
@@ -424,8 +424,9 @@ public class SimplexAlgorithm {
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
+			
 			sim.initialize();
-			sim.augmentieren(sim.getGraph().getArcs().get(4));
+
 			System.out.println(sim.getGraph().toString());
 //			sim.startOptimierung();
 //			System.out.println(sim.getGraph().toString());
