@@ -54,15 +54,16 @@ public class Graph {
 
 	
 	public String toString(){
-		String output = "Knoten v; [Knoten u mit (v,u) als Kante]\n";
+		String output = "Knoten v; [Knoten u mit (v,u) als Kante (low/up/cost/flow)]\n";
 		String head = "";
 		for( Vertex v : vertices){
 			output = output + v.getId();
 			head= "; [";
 			for( Arc a : v.getDeltaPlus()){
-				 head= head + a.getHead().getId()+ "; ";
+				 head= head + a.getHead().getId()+ " ("+ a.getLow()+"/"+a.getCap()+"/"+ a.getCost()
+						 +"/"+ a.getFlowX()+")  ;  ";
 			}
-			if (head.length() > 3) head = head.substring(0, head.length()-2);
+			if (head.length() > 3) head = head.substring(0, head.length()-5);
 			head = head+"] ";
 			output = output + head + "\n";
 		}
