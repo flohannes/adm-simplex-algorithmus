@@ -146,7 +146,9 @@ public class SimplexAlgorithm {
 		return null;
 	}
 
+	
 	private void augmentieren(Arc e){
+		System.out.println(e.getTail().getId()+" nach "+ e.getHead().getId());
 		T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
