@@ -53,7 +53,7 @@ public class SimplexAlgorithm {
 		T = new ArrayList<Arc>(); 
 		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
-		int M = (int) (1+(0.5 * (g.getVertices().size()-1)) * g.getMaxCost());  // M entsprechend (7.27)
+		int M = (int) (1+(0.5 * (g.getVertices().size())) * g.getMaxCost());  // M entsprechend (7.27)
 		
 		//V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
@@ -421,6 +421,8 @@ public class SimplexAlgorithm {
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
+//			sim.initialize();
+//			System.out.println(sim.getGraph().toString());
 			sim.startOptimierung();
 			System.out.println(sim.getGraph().toString());
 			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
