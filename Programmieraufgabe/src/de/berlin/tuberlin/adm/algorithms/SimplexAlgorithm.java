@@ -128,6 +128,7 @@ public class SimplexAlgorithm {
 		for(Arc a : L){
 			a.setReducedCost(a.getCost() + a.getTail().getPrice() - a.getHead().getPrice());
 		}
+		
 	}
 	
 	private Arc optimalitaetstest(){
@@ -273,7 +274,7 @@ public class SimplexAlgorithm {
 			}
 		}
 		
-		
+		System.out.println("max"+maxC);
 		
 		/**
 		 * Augmentieren: 
@@ -423,11 +424,12 @@ public class SimplexAlgorithm {
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
-//			sim.initialize();
-//			System.out.println(sim.getGraph().toString());
-			sim.startOptimierung();
+			sim.initialize();
+			sim.augmentieren(sim.getGraph().getArcs().get(4));
 			System.out.println(sim.getGraph().toString());
-			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
+//			sim.startOptimierung();
+//			System.out.println(sim.getGraph().toString());
+//			System.out.println("Time for readin ms: " + r.getStopwatch().getElapsedTime());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
