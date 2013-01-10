@@ -70,7 +70,7 @@ public class SimplexAlgorithm {
 				}
 				for( Arc a : v.getDeltaMinus()){
 						nettoB = nettoB - a.getLow();
-							
+						
 				}
 			
 				if(nettoB < 0){ // Hinzufuegen von Boegen 
@@ -281,6 +281,8 @@ public class SimplexAlgorithm {
 		 * Nochmal den Kreis durchgehen und schauen obs in U oder L ist.
 		 */
 		if(e.getReducedCost() < 0){ //e ist aus L
+			e.setFlowX(e.getFlowX() + maxC); //Fluss auf e erhoehen
+			
 			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
 				Arc a = v.get(p).getArc(v.get(p+1));
 				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
@@ -309,6 +311,8 @@ public class SimplexAlgorithm {
 			
 		}
 		else{// e ist aus U
+			e.setFlowX(e.getFlowX() - maxC); //Fluss auf e verringern
+
 			for(int p = 0; p<v.size()-1; p++){ //maxC finden. Weg von v0 bis vn
 				Arc a = v.get(p).getArc(v.get(p+1));
 				if(a.getTail().equals(v.get(p))){ //Vorwaertsbogen
@@ -420,13 +424,14 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 		
 		try {
-			Input r = new Input( "src/InputData/test");
+			Input r = new Input( "src/InputData/test1");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
 			
-			sim.initialize();
-
+			//sim.initialize();
+			sim.startOptimierung();
+			
 			System.out.println(sim.getGraph().toString());
 //			sim.startOptimierung();
 //			System.out.println(sim.getGraph().toString());
