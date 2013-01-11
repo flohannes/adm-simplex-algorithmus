@@ -377,6 +377,7 @@ public class SimplexAlgorithm {
 		Arc f = this.findF(u, v, e);
 
 		// update Knotenpreise
+		this.updateKnotenpreise(e, f);
 
 		T.remove(f);
 		T.add(e);
@@ -453,7 +454,7 @@ public class SimplexAlgorithm {
 	}
 
 	private void updateS() {
-
+		
 	}
 
 	private void updateP() {
