@@ -49,7 +49,7 @@ public class SimplexAlgorithm {
 	 * Step 1: Initalisierung
 	 */
 	public void initialize(){
-		L = (ArrayList<Arc>) g.getArcs().clone(); // Wir schreiben erstmal alle Boegen in L
+		L = (ArrayList<Arc>) g.getArcs(); // Wir schreiben erstmal alle Boegen in L
 		T = new ArrayList<Arc>(); 
 		U = new ArrayList<Arc>(); //Bleibt erstmal Leer
 		
@@ -81,7 +81,7 @@ public class SimplexAlgorithm {
 					a.setCost(M);
 					a.setFlowX(-nettoB);	//Fluss x bestimmen
 					g.addArc(a);
-					T.add(a.clone());
+					T.add(a);
 				}
 				else{
 					Arc a = new Arc(k,v);
@@ -91,7 +91,7 @@ public class SimplexAlgorithm {
 					a.setCost(M);
 					a.setFlowX(nettoB);		//Fluss x bestimmen
 					g.addArc(a);
-					T.add(a.clone());
+					T.add(a);
 				}
 			}
 		}
@@ -345,7 +345,7 @@ public class SimplexAlgorithm {
 		/*
 		 * Baumloesung aktualisieren
 		 */
-		Arc f = this.findF(u, v);
+		Arc f = this.findF(u, v, e);
 		
 		T.remove(f);
 		T.add(e);
@@ -361,22 +361,23 @@ public class SimplexAlgorithm {
 		//p,d und s anpassen und Knotenpreise
 	}
 
-	private Arc findF(List<Vertex> u, List<Vertex> v){
+	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e){
 		for(int i =0; i< v.size()-1;i++){
 			Arc a = v.get(i).getArc(v.get(i+1));
 			if(a.getFlowX()==a.getCap() || a.getFlowX() == a.getLow())
 				return a;
 		}
-		for(int i = 0; i<u.size()-1;i++){
-			Arc a = u.get(i).getArc(u.get(i+1));
+		Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
+		if(lastA.getFlowX()==lastA.getCap() || lastA.getFlowX() == lastA.getLow())
+			return lastA;			
+		
+		for(int i = u.size(); i>0;i--){
+			Arc a = u.get(i-1).getArc(u.get(i));
 			if(a.getFlowX()==a.getCap() || a.getFlowX() == a.getLow())
 				return a;
 		}
-		Arc lastA = u.get(u.size()-1).getArc(v.get(v.size()-1)); //letzten Weg im Kreis zwischen un und vn
-		if(lastA.getFlowX()==lastA.getCap() || lastA.getFlowX() == lastA.getLow())
-			return lastA;
 		
-		return null;
+		return e;
 	}
 	
 	
