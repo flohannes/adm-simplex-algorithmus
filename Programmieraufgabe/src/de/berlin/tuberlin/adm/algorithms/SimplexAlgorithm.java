@@ -111,7 +111,7 @@ public class SimplexAlgorithm {
 			} else {
 				p[i] = NumberOfNodes;
 				d[i] = 2;
-				s[i] = i+2;
+				s[i] = i + 2;
 			}
 		}
 
@@ -377,7 +377,7 @@ public class SimplexAlgorithm {
 		Arc f = this.findF(u, v, e);
 
 		// update Knotenpreise
-		if(!e.equals(f)){
+		if (!e.equals(f)) {
 			this.updateKnotenpreise(e, f);
 			T.remove(f);
 			T.add(e);
@@ -391,8 +391,6 @@ public class SimplexAlgorithm {
 				U.add(f);
 		}
 
-		
-
 		// p,d und s anpassen und Knotenpreise
 	}
 
@@ -404,7 +402,7 @@ public class SimplexAlgorithm {
 	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e) {
 		for (int i = 0; i < v.size() - 1; i++) {
 			Arc a = v.get(i).getArc(v.get(i + 1));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()){
+			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 				a.setuORv('v');
 				return a;
 			}
@@ -423,55 +421,77 @@ public class SimplexAlgorithm {
 
 		for (int i = u.size(); i > 0; i--) {
 			Arc a = u.get(i - 1).getArc(u.get(i));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()){
+			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 				a.setuORv('u');
 				return a;
 			}
 		}
-		
+
 		e.setuORv('e');
 		return e;
 	}
 
-	
 	/**
-	 * @param e entering Arc 
-	 * @param l leaving Arc 
-	 * Wir nutzen Algo 2 aus der Uebung vom 21.12.12
-	 * Updated nach Augmentation die Knotenpreise.
+	 * @param e
+	 *            entering Arc
+	 * @param l
+	 *            leaving Arc Wir nutzen Algo 2 aus der Uebung vom 21.12.12
+	 *            Updated nach Augmentation die Knotenpreise.
 	 * 
 	 */
-	private void updateKnotenpreise(Arc e, Arc l) { 
+	private void updateKnotenpreise(Arc e, Arc l) {
 		Vertex k;
-		if(d[l.getTail().getId()-1] > d[l.getHead().getId()-1]){ // Waehlt Endknoten t1, t2 von l so, dass d(t2)=d(t1)+1, setzt dann k = t2 
+		if (d[l.getTail().getId() - 1] > d[l.getHead().getId() - 1]) { // Waehlt
+																		// Endknoten
+																		// t1,
+																		// t2
+																		// von l
+																		// so,
+																		// dass
+																		// d(t2)=d(t1)+1,
+																		// setzt
+																		// dann
+																		// k =
+																		// t2
 			k = l.getTail();
-		}else{
+		} else {
 			k = l.getHead();
 		}
-		int tiefe = d[k.getId()-1];
-		
-		while(d[k.getId()-1] >= tiefe){
-			Arc a = this.g.getVertexById(p[k.getId()-1]).getArc(k);
-			
-			if(l.getuORv() == 'u'){
-				k.setPrice(k.getPrice() - e.getReducedCost()); // yk = yk - c^-e, falls Bogen e zur Wurzel gerichtet.
+		int tiefe = d[k.getId() - 1];
+
+		while (d[k.getId() - 1] >= tiefe) {
+			Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
+
+			if (l.getuORv() == 'u') {
+				k.setPrice(k.getPrice() - e.getReducedCost()); // yk = yk -
+																// c^-e, falls
+																// Bogen e zur
+																// Wurzel
+																// gerichtet.
+			} else if (l.getuORv() == 'v') {
+				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk -
+																// c^-e, falls
+																// Bogen e nicht
+																// zur Wurzel
+																// gerichtet.
+			} else {
+				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk -
+																// c^-e, falls
+																// Bogen e nicht
+																// zur Wurzel
+																// gerichtet.
 			}
-			else if(l.getuORv() == 'v'){
-				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen e nicht zur Wurzel gerichtet.
-			}
-			else{
-				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen e nicht zur Wurzel gerichtet.
-			}
-				
-			k = g.getVertexById(s[k.getId()-1]); // Knoten k wird geupdated auf Nachfolger von k.
+
+			k = g.getVertexById(s[k.getId() - 1]); // Knoten k wird geupdated
+													// auf Nachfolger von k.
 		}
 	}
 
 	private void updateS() {
-		
+
 	}
 
-	private void updateP() {
+	private void updateP(Arc e, Arc l, List<Vertex> uORv) {
 
 	}
 
@@ -479,19 +499,6 @@ public class SimplexAlgorithm {
 
 	}
 
-	/*
-	 * ToDo: 1. Initalisierung ein wenig fehlt noch, aber fast fertig. kann
-	 * schonmal auf fehler ueberprueft werden. 2. Berechnung der Knotenpreise 3.
-	 * Optimalitaetstest 4. Pricing 5. Augmentieren 6. Update
-	 * 
-	 * am besten alles in jeweils eigene Methoden schreiben und von
-	 * startOptimierung aufrufen lassen.
-	 * 
-	 * Eine Stopwatch Klasse habe ich schon fertig geschrieben. diese kann man
-	 * am anfang der berechnung starten und am ende stoppen und dann die Zeit
-	 * ausgeben lassen, wie schnell berechnet wurde. Denke, dass ist ein cooler
-	 * zusatz.
-	 */
 
 	public Stopwatch getStopwatch() {
 		return stopwatch;
