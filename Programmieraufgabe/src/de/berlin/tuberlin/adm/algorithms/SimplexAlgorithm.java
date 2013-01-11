@@ -425,9 +425,16 @@ public class SimplexAlgorithm {
 	}
 
 	
+	/**
+	 * @param e entering Arc 
+	 * @param l leaving Arc 
+	 * Wir nutzen Algo 2 aus der Uebung vom 21.12.12
+	 * Updated nach Augmentation die Knotenpreise.
+	 * 
+	 */
 	private void updateKnotenpreise(Arc e, Arc l) { 
 		Vertex k;
-		if(d[l.getTail().getId()-1] > d[l.getHead().getId()-1]){
+		if(d[l.getTail().getId()-1] > d[l.getHead().getId()-1]){ // Waehlt Endknoten t1, t2 von l so, dass d(t2)=d(t1)+1, setzt dann k = t2 
 			k = l.getTail();
 		}else{
 			k = l.getHead();
@@ -437,11 +444,11 @@ public class SimplexAlgorithm {
 		while(d[k.getId()-1] >= tiefe){
 			Arc a = this.g.getVertexById(p[k.getId()-1]).getArc(k);
 			if( a.getHead().equals(k)) 
-				k.setPrice(k.getPrice() + e.getReducedCost());
+				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen a nicht zur Wurzel gerichtet.
 			else 
-				k.setPrice(k.getPrice() - e.getReducedCost());
+				k.setPrice(k.getPrice() - e.getReducedCost());  // yk = yk - c^-e, falls Bogen a zur Wurzel gerichtet.
 			
-			k = g.getVertexById(s[k.getId()-1]);
+			k = g.getVertexById(s[k.getId()-1]); // Knoten k wird geupdated auf Nachfolger von k.
 		}
 	}
 
