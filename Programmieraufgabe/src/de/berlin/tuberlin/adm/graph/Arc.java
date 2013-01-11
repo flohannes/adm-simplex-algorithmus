@@ -11,6 +11,8 @@ public class Arc {
 	private int cap; // u(a)
 	private int flowX; // x(a)
 	
+	private char uORv;
+	
 	
 	public Arc (Vertex tail, Vertex head){
 		this.head = head;
@@ -90,6 +92,14 @@ public class Arc {
 		this.flowX = flowX;
 	}
 	
+	public char getuORv() {
+		return uORv;
+	}
+
+	public void setuORv(char uORv) {
+		this.uORv = uORv;
+	}
+
 	public String toString(){
 		return "a "+ this.tail.getId() + " " + this.head.getId() + " " + this.getLow() + " " + this.getCap() + " " + this.getCost();
 	}

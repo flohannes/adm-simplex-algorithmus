@@ -377,18 +377,21 @@ public class SimplexAlgorithm {
 		Arc f = this.findF(u, v, e);
 
 		// update Knotenpreise
-		this.updateKnotenpreise(e, f);
+		if(!e.equals(f)){
+			this.updateKnotenpreise(e, f);
+			T.remove(f);
+			T.add(e);
 
-		T.remove(f);
-		T.add(e);
+			L.remove(e);
+			if (f.getFlowX() == f.getLow())
+				L.add(f);
 
-		L.remove(e);
-		if (f.getFlowX() == f.getLow())
-			L.add(f);
+			U.remove(e);
+			if (f.getFlowX() == f.getCap())
+				U.add(f);
+		}
 
-		U.remove(e);
-		if (f.getFlowX() == f.getCap())
-			U.add(f);
+		
 
 		// p,d und s anpassen und Knotenpreise
 	}
@@ -401,8 +404,10 @@ public class SimplexAlgorithm {
 	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e) {
 		for (int i = 0; i < v.size() - 1; i++) {
 			Arc a = v.get(i).getArc(v.get(i + 1));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow())
+			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()){
+				a.setuORv('v');
 				return a;
+			}
 		}
 		Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
 																		// Weg
@@ -418,10 +423,13 @@ public class SimplexAlgorithm {
 
 		for (int i = u.size(); i > 0; i--) {
 			Arc a = u.get(i - 1).getArc(u.get(i));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow())
+			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()){
+				a.setuORv('u');
 				return a;
+			}
 		}
-
+		
+		e.setuORv('e');
 		return e;
 	}
 
@@ -444,11 +452,17 @@ public class SimplexAlgorithm {
 		
 		while(d[k.getId()-1] >= tiefe){
 			Arc a = this.g.getVertexById(p[k.getId()-1]).getArc(k);
-			if( a.getHead().equals(k)) 
-				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen a nicht zur Wurzel gerichtet.
-			else 
-				k.setPrice(k.getPrice() - e.getReducedCost());  // yk = yk - c^-e, falls Bogen a zur Wurzel gerichtet.
 			
+			if(l.getuORv() == 'u'){
+				k.setPrice(k.getPrice() - e.getReducedCost()); // yk = yk - c^-e, falls Bogen e zur Wurzel gerichtet.
+			}
+			else if(l.getuORv() == 'v'){
+				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen e nicht zur Wurzel gerichtet.
+			}
+			else{
+				k.setPrice(k.getPrice() + e.getReducedCost()); // yk = yk - c^-e, falls Bogen e nicht zur Wurzel gerichtet.
+			}
+				
 			k = g.getVertexById(s[k.getId()-1]); // Knoten k wird geupdated auf Nachfolger von k.
 		}
 	}
