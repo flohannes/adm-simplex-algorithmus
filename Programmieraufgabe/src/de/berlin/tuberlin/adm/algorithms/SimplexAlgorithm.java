@@ -360,6 +360,12 @@ public class SimplexAlgorithm {
 		
 		//p,d und s anpassen und Knotenpreise
 	}
+	
+	
+	/* 
+	 * Helper fuer augmentieren()
+	 * Findet Kante in V oder U, bei welcher die obere oder untere Kapazitaetsgrenze erreicht ist
+	*/  
 
 	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e){
 		for(int i =0; i< v.size()-1;i++){
