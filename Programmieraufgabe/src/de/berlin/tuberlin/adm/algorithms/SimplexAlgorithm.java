@@ -107,14 +107,11 @@ public class SimplexAlgorithm {
 			if (i == NumberOfNodes - 1) {
 				p[i] = -1; // k ist die Wurzel (p = Predecessor)
 				d[i] = 1; // d = Depth
-				s[i] = 2; // s = successor
+				s[i] = 1; // s = successor
 			} else {
 				p[i] = NumberOfNodes;
 				d[i] = 2;
-				if (i == 0)
-					s[i] = NumberOfNodes;
-				else
-					s[i] = i + 2;
+				s[i] = i+2;
 			}
 		}
 
@@ -444,7 +441,7 @@ public class SimplexAlgorithm {
 			else 
 				k.setPrice(k.getPrice() - e.getReducedCost());
 			
-
+			k = g.getVertexById(s[k.getId()-1]);
 		}
 	}
 
