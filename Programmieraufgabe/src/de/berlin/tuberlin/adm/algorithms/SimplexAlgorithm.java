@@ -429,6 +429,23 @@ public class SimplexAlgorithm {
 
 	
 	private void updateKnotenpreise(Arc e, Arc l) { 
+		Vertex k;
+		if(d[l.getTail().getId()-1] > d[l.getHead().getId()-1]){
+			k = l.getTail();
+		}else{
+			k = l.getHead();
+		}
+		int tiefe = d[k.getId()-1];
+		
+		while(d[k.getId()-1] >= tiefe){
+			Arc a = this.g.getVertexById(p[k.getId()-1]).getArc(k);
+			if( a.getHead().equals(k)) 
+				k.setPrice(k.getPrice() + e.getReducedCost());
+			else 
+				k.setPrice(k.getPrice() - e.getReducedCost());
+			
+
+		}
 	}
 
 	private void updateS() {
