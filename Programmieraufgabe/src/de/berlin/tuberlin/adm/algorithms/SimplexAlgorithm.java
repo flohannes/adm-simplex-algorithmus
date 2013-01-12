@@ -107,7 +107,7 @@ public class SimplexAlgorithm {
 			if (i == NumberOfNodes - 1) {
 				p[i] = -1; // k ist die Wurzel (p = Predecessor)
 				d[i] = 1; // d = Depth
-				s[i] = 1; // s = successor
+				s[i] = 1; // s = successor (in preorder)
 			} else {
 				p[i] = NumberOfNodes;
 				d[i] = 2;
@@ -118,18 +118,12 @@ public class SimplexAlgorithm {
 		// Knotenpreise und reduzierte Kosten in T
 		k.setPrice(0);
 		for (Arc a : k.getDeltaPlus()) {
-			// a.getHead().setPrice(a.getCost()); // immer M
-			// a.setReducedCost(a.getCost() - a.getHead().getPrice()); // immer
-			// 0
 			a.getHead().setPrice(M); // immer MaxCost
-			a.setReducedCost(0);
+			a.setReducedCost(0);	//reduzierte kosten im baum immer 0
 		}
 		for (Arc a : k.getDeltaMinus()) {
-			// a.getTail().setPrice(-a.getCost()); // immer -M
-			// a.setReducedCost(a.getCost() + a.getTail().getPrice()); // immer
-			// 0
-			a.getTail().setPrice(-M);
-			a.setReducedCost(0);
+			a.getTail().setPrice(-M); //Knotenpreis
+			a.setReducedCost(0);	//reduzierte kosten im baum immer 0
 		}
 		// reduzierte Kosten in L
 		for (Arc a : L) {
@@ -154,52 +148,136 @@ public class SimplexAlgorithm {
 		}
 		return null;
 	}
+	
+	/**
+	 * Gibt den max Wert zurück, um den auf dieser Kante augmentiert werden kann
+	 * @param u erster Knoten, vorderer in der Liste
+	 * @param v zweiter Knoten, hinterer in der Liste
+	 * @param b true, falls u und v in aus der Liste u, sonst false
+	 * @return max Wert
+	 */
+	private int calcAugValue ( Vertex u , Vertex v , boolean b , boolean isL){
+		Arc tmp = u.getArc(v);
+		
+		if(isL){//e ist in L, d.h. wir wollen Fluss erhöhen(auf Vor-Knoten)
+			if (b){//u und v sind aus u
+				if(tmp.getHead().equals(u))	//Vorwaertskante
+					return tmp.getCap() - tmp.getFlowX();
+				else
+					return tmp.getFlowX() - tmp.getLow();
+					
+			}else{ //u und v sind aus v
+				if(tmp.getHead().equals(v))	//Vorwaertskante
+					return tmp.getCap() - tmp.getFlowX();
+				else 
+					return tmp.getFlowX() - tmp.getLow();
+			}
+		}else{//e ist in U, d.h. wir wollen Fluss verringern( auf Vor_Knoten)
+			if (b){//u und v sind aus u
+				if(tmp.getHead().equals(u))	//Vorwaertskante
+					return tmp.getFlowX() - tmp.getLow();
+				else
+					return tmp.getCap() - tmp.getFlowX();
+					
+			}else{ //u und v sind aus v
+				if(tmp.getHead().equals(v))	//Vorwaertskante
+					return tmp.getFlowX() - tmp.getLow();
+				else 
+					return tmp.getCap() - tmp.getFlowX();
+			}
+		}
+		
+	}
+	
 
 	private void augmentieren(Arc e) {
-		System.out
-				.println(e.getTail().getId() + " nach " + e.getHead().getId());
+		System.out.println(e.getTail().getId() + " nach " + e.getHead().getId());
 		T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
 		v.add(e.getHead());
 
-		int maxC = Integer.MIN_VALUE;
+		int maxC;
+		boolean e_L;// true, falls e in L ist, false falls e in U
+		if(e.getReducedCost()< 0){
+			e_L = true;
+			maxC = e.getCap() - e.getFlowX();
+		}else{
+			e_L = false;
+			maxC = e.getFlowX() - e.getLow();
+		}	
+		int help=0;
 		if (d[u.get(0).getId() - 1] > d[v.get(0).getId() - 1]) {
-			maxC = Math.abs(e.getFlowX() - e.getCap());
 			int i = 0;
 			int j = 0;
 			while (!(u.get(i).equals(v.get(j)))) { // Kreis rekonstruieren
 				if (this.d[u.get(i).getId() - 1] != this.d[v.get(j).getId() - 1]) {
 					u.add(g.getVertexById(p[u.get(i).getId() - 1]));
 					i++;
+					
+					//aktualisiere maxC
+					help = calcAugValue(u.get(i-1), u.get(i), true , e_L);
+					if(maxC > help)
+						maxC = help;
+					
 				} else {
 					u.add(g.getVertexById(p[u.get(i).getId() - 1]));
 					i++;
 					v.add(g.getVertexById(p[v.get(j).getId() - 1]));
 					j++;
+					
+					//aktualisiere maxC
+					help = calcAugValue(u.get(i-1), u.get(i), true , e_L);
+					if(maxC > help)
+						maxC = help;
+					
+					help = calcAugValue(v.get(j-1), u.get(j), false , e_L);
+					if(maxC > help)
+						maxC = help;
 				}
+				
+				
 			}
 			v.remove(v.size() - 1); // wird geloescht fuer den Weg
 		} else {
-			maxC = Math.abs(e.getFlowX() - e.getCap());
 			int i = 0;
 			int j = 0;
 			while (!(u.get(i).equals(v.get(j)))) { // Kreis rekonstruieren
 				if (this.d[u.get(i).getId() - 1] != this.d[v.get(j).getId() - 1]) {
 					v.add(g.getVertexById(p[v.get(j).getId() - 1]));
 					j++;
+					
+					//aktualisiere maxC
+					help = calcAugValue(v.get(j-1), v.get(j), false , e_L);
+					if(maxC > help)
+						maxC = help;
+					
 				} else {
 					u.add(g.getVertexById(p[u.get(i).getId() - 1]));
 					i++;
 					v.add(g.getVertexById(p[v.get(j).getId() - 1]));
 					j++;
+					
+					//aktualisiere maxC
+					help = calcAugValue(u.get(i-1), u.get(i), true , e_L);
+					if(maxC > help)
+						maxC = help;
+					
+					help = calcAugValue(v.get(j-1), u.get(j), false , e_L);
+					if(maxC > help)
+						maxC = help;
+					
 				}
 			}
 			v.remove(v.size() - 1); // wird geloescht fuer den Weg
+									//dieser knoten ist bereits in u
 		}
+		
+		
+		System.out.println("Hier ist maxC: "+maxC);
 
-		if (e.getReducedCost() < 0) {// e ist aus L
+/*		if (e.getReducedCost() < 0) {// e ist aus L
 			for (int p = 0; p < v.size() - 1; p++) { // maxC finden. Weg von v0
 														// bis vn
 				Arc a = v.get(p).getArc(v.get(p + 1));
@@ -228,13 +306,7 @@ public class SimplexAlgorithm {
 				}
 			}
 			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																			// Weg
-																			// im
-																			// Kreis
-																			// zwischen
-																			// un
-																			// und
-																			// vn
+																		
 			if (lastA.getHead().equals(u.get(u.size() - 1))) {
 				if (maxC > lastA.getCap() - lastA.getFlowX()) {
 					maxC = lastA.getCap() - lastA.getFlowX();
@@ -274,13 +346,7 @@ public class SimplexAlgorithm {
 				}
 			}
 			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																			// Weg
-																			// im
-																			// Kreis
-																			// zwischen
-																			// un
-																			// und
-																			// vn
+
 			if (lastA.getHead().equals(u.get(u.size() - 1))) {
 				if (maxC > lastA.getFlowX() - lastA.getLow()) {
 					maxC = lastA.getFlowX() - lastA.getLow();
@@ -291,9 +357,8 @@ public class SimplexAlgorithm {
 				}
 			}
 		}
-
 		System.out.println("max" + maxC);
-
+*/
 		/**
 		 * Augmentieren: Nochmal den Kreis durchgehen und schauen obs in U oder
 		 * L ist.
