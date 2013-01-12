@@ -455,8 +455,10 @@ public class SimplexAlgorithm {
 			if (f.getFlowX() == f.getCap())
 				U.add(f);
 		}
-
+		
 		// p,d und s anpassen und Knotenpreise
+		this.updateP(e, v);
+
 	}
 
 	/*
@@ -556,12 +558,20 @@ public class SimplexAlgorithm {
 
 	}
 
-	private void updateP(Arc e, Arc l, List<Vertex> uORv) {
-
+	private void updateP(Arc e, List<Vertex> uORv) {
+//		Nur pivot-Weg aendert sich. p=v1,...,vk
+		for(int i = 0; i < uORv.size(); i++){
+			if(i == 0)
+				p[uORv.get(i).getId()-1] = e.getHead().getId();
+			else
+				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId(); 
+		}
 	}
 
-	private void updateD() {
-
+	private void updateD(Arc e, List<Vertex> uORv) {
+		d[e.getTail().getId()-1] = 1;
+		d[e.getHead().getId()-1] = 1;
+		//...
 	}
 
 
