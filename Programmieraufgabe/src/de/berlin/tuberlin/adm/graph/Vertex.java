@@ -79,6 +79,17 @@ public class Vertex {
 		this.price = price;
 	}
 	
+	/**
+	 * Returns true,falls die kante der Form (this,u) ist
+	 * false, falls (u,this) 
+	 */
+	public boolean direction( Vertex u){
+		if( this.getArc(u).getHead().equals(u))
+			return true;
+		else 
+			return false;
+	}
+	
 	
 	public String toString(){
 		return "n " + this.getId()+ " " + this.getFlow();
