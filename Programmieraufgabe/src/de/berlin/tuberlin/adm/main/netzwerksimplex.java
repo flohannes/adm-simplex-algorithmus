@@ -22,10 +22,13 @@ public class netzwerksimplex {
 
 		
 		//Ausführen von der Klasse SimplexAlgorithmus. ein Graph soll eingegeben werden und berechnet werden.
+		System.out.println(input.getGraph().toString());
 		SimplexAlgorithm simplex = new SimplexAlgorithm(input.getGraph());
 		simplex.startOptimierung();
+		System.out.println(input.getGraph().toString());
+
 		System.out.println("Time in ms: " + simplex.getStopwatch().getElapsedTime());
-		
+
 		//args[1] ist Ausgabedatei und bekommt von SimplexAlgorithmus das Ergebnis, welches in eine Ausgabedatei geschrieben werden soll.
 		Output output = new Output("src/OutputData", simplex.getGraph());
 	}
