@@ -41,7 +41,7 @@ public class SimplexAlgorithm {
 		initialize();
 		// Hier kommen die restlichen Methoden hin
 		// ...
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < 10; i++){
 			Arc e = this.optimalitaetstest();
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i+1)); //Anzahl Augmentierungsschritte
