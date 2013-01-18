@@ -88,7 +88,10 @@ public class Arc {
 		return flowX;
 	}
 
-	public void setFlowX(int flowX) {
+	public void setFlowX(int flowX) throws IllegalArgumentException{
+		if(flowX > this.cap || flowX < this.low){
+			throw new IllegalArgumentException("Kapazitaetsgrenzenueberschritten");
+		}
 		this.flowX = flowX;
 	}
 	

@@ -463,8 +463,9 @@ public class SimplexAlgorithm {
 		if (!e.equals(f)) {
 			this.updateKnotenpreise(e, f);
 			T.remove(f);
+			e.setReducedCost(0);
 			T.add(e);
-
+			
 			L.remove(e);
 			if (f.getFlowX() == f.getLow())
 				L.add(f);
@@ -482,8 +483,14 @@ public class SimplexAlgorithm {
 				this.updatePundD(e,f, u);
 			
 		}
-		
-		
+		for (Arc a : L) {
+			a.setReducedCost(a.getCost() + a.getTail().getPrice()
+					- a.getHead().getPrice());
+		}
+		for (Arc a : U) {
+			a.setReducedCost(a.getCost() + a.getTail().getPrice()
+					- a.getHead().getPrice());
+		}
 		
 	}
 
@@ -629,7 +636,7 @@ public class SimplexAlgorithm {
 	//Methode Update S Schritt 3-7
 	private void updateSTeil2(int i, int t2, int e1, int a, int r, int e2, int k, int b){
 		while(true){		
-		//3.Schritt: Ersetze s duch s*
+			//3.Schritt: Ersetze s duch s*
 				if(i==t2){
 					if(e1 != a){
 						s[a-1] = r;
