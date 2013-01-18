@@ -41,7 +41,14 @@ public class SimplexAlgorithm {
 		initialize();
 		// Hier kommen die restlichen Methoden hin
 		// ...
-		this.augmentieren(this.optimalitaetstest());
+		for(int i = 0; i < 5; i++){
+			Arc e = this.optimalitaetstest();
+			if(e==null){
+				System.out.println("Anzahl Augmentierungsschritte:" + (i+1)); //Anzahl Augmentierungsschritte
+				break;
+			}
+			this.augmentieren(e);	
+		}
 		stopwatch.stop();
 	}
 
@@ -191,6 +198,17 @@ public class SimplexAlgorithm {
 	
 
 	private void augmentieren(Arc e) {
+		if(e == null){
+			System.out.println("e ist null");
+		}
+		else if(e.getTail() == null){
+			System.out.println("e.tail ist null");
+				
+		}
+		else if(e.getHead() == null){
+			System.out.println("e.head ist null");
+				
+		}
 		System.out.println(e.getTail().getId() + " nach " + e.getHead().getId());
 		T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
@@ -454,11 +472,19 @@ public class SimplexAlgorithm {
 			U.remove(e);
 			if (f.getFlowX() == f.getCap())
 				U.add(f);
+		
+		
+			// p,d und s anpassen
+			this.updateS(e, f);
+			if(f.getuORv() == 'v')
+				this.updatePundD(e,f, v);
+			else if(f.getuORv() == 'u')
+				this.updatePundD(e,f, u);
+			
 		}
 		
-		// p,d und s anpassen und Knotenpreise
-		this.updateP(e, v);
-
+		
+		
 	}
 
 	/*
@@ -483,8 +509,10 @@ public class SimplexAlgorithm {
 																		// und
 																		// vn
 		if (lastA.getFlowX() == lastA.getCap()
-				|| lastA.getFlowX() == lastA.getLow())
+				|| lastA.getFlowX() == lastA.getLow()){
+			lastA.setuORv('v');
 			return lastA;
+		}
 
 		for (int i = u.size(); i > 0; i--) {
 			Arc a = u.get(i - 1).getArc(u.get(i));
@@ -554,27 +582,118 @@ public class SimplexAlgorithm {
 		}
 	}
 
-	private void updateS() {
-
+	private void updateS(Arc e, Arc l) {
+		//Initialisierung
+		int a;
+		int t2;
+		if (d[l.getTail().getId() - 1] > d[l.getHead().getId() - 1]) {
+			a = l.getHead().getId();
+			t2 = l.getTail().getId();
+		}
+		else{
+			a = l.getTail().getId();
+			t2 = l.getHead().getId();
+		}
+		while(s[a-1] != t2){
+			a = g.getVertexById(s[a-1]).getId();
+		}
+		
+		int b;
+		int e1;
+		int e2;
+		int i;
+		
+		if (l.getuORv() == 'u') {
+			b = s[e.getTail().getId()-1];
+			e1 = e.getTail().getId();
+			e2 = e.getHead().getId();
+			i = e2;
+		}
+		else{
+			b = s[e.getHead().getId()-1];
+			e1 = e.getHead().getId();
+			e2 = e.getTail().getId();
+			i = e2;
+		}
+		
+		//2.Schritt: Finde letzten Knoten (bezueglich s) k von S1
+		int k = i;
+		while(d[s[k-1]-1] > d[i-1]){
+			k = s[k-1];
+		}
+		int r = s[k-1];
+		
+		updateSTeil2(i,t2,e1, a, r, e2, k, b);
 	}
-
-	private void updateP(Arc e, List<Vertex> uORv) {
-//		Nur pivot-Weg aendert sich. p=v1,...,vk
-		for(int i = 0; i < uORv.size(); i++){
-			if(i == 0)
-				p[uORv.get(i).getId()-1] = e.getHead().getId();
-			else
-				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId(); 
+	
+	//Methode Update S Schritt 3-7
+	private void updateSTeil2(int i, int t2, int e1, int a, int r, int e2, int k, int b){
+		while(true){		
+		//3.Schritt: Ersetze s duch s*
+				if(i==t2){
+					if(e1 != a){
+						s[a-1] = r;
+						s[e1-1] = e2;
+						s[k-1] = b;
+					}
+					else{
+						s[e1-1] = e2;
+						s[k-1] = r;
+					}
+				}
+				else{
+					break;
+				}
+				
+				//4.Schritt
+				int j = i;
+				i = p[i-1];
+				s[k-1] =i;
+				
+				//5.Schritt: Finde letzten Knoten k in linken Teil von Sk
+				k = i;
+				while(s[k-1] != j){
+					if(d[r-1]>d[i-1]){
+						s[k-1] = r;
+						while(d[s[k-1]-1]>d[i-1]){
+							k = s[k-1];
+						}
+						r = s[k-1];
+					}
+					
+					//ACHTUNG
+//					updateSTeil2(i,t2,e1, a, r, e2, k, b);
+				}
 		}
 	}
 
-	private void updateD(Arc e, List<Vertex> uORv) {
-		d[e.getTail().getId()-1] = 1;
-		d[e.getHead().getId()-1] = 1;
-		//...
+	private void updatePundD(Arc e, Arc l, List<Vertex> uORv) {
+//		Nur pivot-Weg aendert sich. p=v1,...,vk
+		for(int i = 0; i < uORv.size(); i++){
+			if(l.getTail().getId() == p[uORv.get(i).getId()-1] || l.getHead().getId() == p[uORv.get(i).getId()-1] ){
+				break;
+			}
+			else{
+				if(i == 0){
+					if(l.getuORv() == 'u'){
+						p[uORv.get(i).getId()-1] = e.getTail().getId();
+						d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
+					}
+					else{ //l in v
+						p[uORv.get(i).getId()-1] = e.getHead().getId();
+						d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
+					}
+				}
+				else{
+					p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
+					d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
+				}
+					
+			}
+		}
 	}
 
-
+	
 	public Stopwatch getStopwatch() {
 		return stopwatch;
 	}
@@ -586,7 +705,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/test1");
+			Input r = new Input("src/InputData/test");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
