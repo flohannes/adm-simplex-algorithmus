@@ -259,7 +259,7 @@ public class SimplexAlgorithm {
 					if(maxC > help)
 						maxC = help;
 					
-					help = calcAugValue(v.get(j-1), u.get(j), false , e_L);
+					help = calcAugValue(v.get(j-1), v.get(j), false , e_L);
 					if(maxC > help)
 						maxC = help;
 				}
@@ -291,7 +291,7 @@ public class SimplexAlgorithm {
 					if(maxC > help)
 						maxC = help;
 					
-					help = calcAugValue(v.get(j-1), u.get(j), false , e_L);
+					help = calcAugValue(v.get(j-1), v.get(j), false , e_L);
 					if(maxC > help)
 						maxC = help;
 					
