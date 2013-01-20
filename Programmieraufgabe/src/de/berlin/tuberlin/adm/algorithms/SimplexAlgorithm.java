@@ -43,8 +43,9 @@ public class SimplexAlgorithm {
 		// ...
 		for(int i = 0; i < 10; i++){
 			Arc e = this.optimalitaetstest();
+			System.out.println(this.toString());
 			if(e==null){
-				System.out.println("Anzahl Augmentierungsschritte:" + (i+1)); //Anzahl Augmentierungsschritte
+				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
 				break;
 			}
 			this.augmentieren(e);	
@@ -137,6 +138,8 @@ public class SimplexAlgorithm {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
 		}
+		
+		
 
 	}
 
@@ -293,7 +296,7 @@ public class SimplexAlgorithm {
 		}
 		
 		
-		System.out.println("Hier ist maxC: "+maxC);
+		//System.out.println("Hier ist maxC: "+maxC);
 
 /*		if (e.getReducedCost() < 0) {// e ist aus L
 			for (int p = 0; p < v.size() - 1; p++) { // maxC finden. Weg von v0
@@ -458,7 +461,7 @@ public class SimplexAlgorithm {
 		 * Baumloesung aktualisieren
 		 */
 		Arc f = this.findF(u, v, e);
-
+		System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
 			this.updateKnotenpreise(e, f);
@@ -491,6 +494,13 @@ public class SimplexAlgorithm {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
 		}
+		
+		
+		String test ="Red-Cost:\n";
+		for(Arc s : L){
+			test= test + s.getTail().getId()+" nach "+s.getHead().getId()+ " : "+ s.getReducedCost()+"\n";
+		}
+		System.out.println(test);
 		
 	}
 
@@ -677,26 +687,27 @@ public class SimplexAlgorithm {
 	private void updatePundD(Arc e, Arc l, List<Vertex> uORv) {
 //		Nur pivot-Weg aendert sich. p=v1,...,vk
 		for(int i = 0; i < uORv.size(); i++){
-			if(l.getTail().getId() == p[uORv.get(i).getId()-1] || l.getHead().getId() == p[uORv.get(i).getId()-1] ){
-				break;
-			}
-			else{
+			
 				if(i == 0){
 					if(l.getuORv() == 'u'){
-						p[uORv.get(i).getId()-1] = e.getTail().getId();
-						d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
-					}
-					else{ //l in v
 						p[uORv.get(i).getId()-1] = e.getHead().getId();
 						d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
+					}
+					else{ //l in v
+						p[uORv.get(i).getId()-1] = e.getTail().getId();
+						d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
 					}
 				}
 				else{
 					p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
 					d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
 				}
-					
-			}
+				
+				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
+				//if(l.getTail().getId() == p[uORv.get(i).getId()-1] || l.getHead().getId() == p[uORv.get(i).getId()-1] ){
+					break;
+				}
+			
 		}
 	}
 
@@ -708,11 +719,28 @@ public class SimplexAlgorithm {
 	public Graph getGraph() {
 		return g;
 	}
+	
+	//print out p d s
+	public String toString(){
+		String pds= "p:\n[";
+		for( int i : this.p) pds = pds+ i +" ;";
+		//pds = pds.substring(0, pds.length()-1);
+		pds = pds+ "]\nd:\n[";
+		
+		for( int i : this.d) pds = pds+ i+" ;";
+		
+		pds = pds+ "]\ns:\n[";
+		for( int i : this.s) pds = pds+ i+" ;";
+		
+		pds = pds +"]";
+
+		return pds;
+	}
 
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/test");
+			Input r = new Input("src/InputData/test1");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
