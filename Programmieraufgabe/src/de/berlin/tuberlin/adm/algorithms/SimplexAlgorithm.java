@@ -57,7 +57,13 @@ public class SimplexAlgorithm {
 	 * Step 1: Initalisierung
 	 */
 	public void initialize() {
-		L = (ArrayList<Arc>) g.getArcs(); // Wir schreiben erstmal alle Boegen
+		L = new ArrayList<Arc>();
+		for(Arc a : g.getArcs()){
+			L.add(a);
+		}
+		
+		
+		//L = (ArrayList<Arc>) g.getArcs(); // Wir schreiben erstmal alle Boegen
 											// in L
 		T = new ArrayList<Arc>();
 		U = new ArrayList<Arc>(); // Bleibt erstmal Leer
@@ -456,7 +462,7 @@ public class SimplexAlgorithm {
 				lastA.setFlowX(lastA.getFlowX() + maxC);
 			}
 		}
-
+		
 		/*
 		 * Baumloesung aktualisieren
 		 */
@@ -464,9 +470,9 @@ public class SimplexAlgorithm {
 		System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
-			this.updateKnotenpreise(e, f);
+			//this.updateKnotenpreise(e, f); //TODO man muss vielleicht erst s updaten bevor man die knkotenpreise updatet!!!
 			T.remove(f);
-			e.setReducedCost(0);
+			//e.setReducedCost(0);
 			T.add(e);
 			
 			L.remove(e);
@@ -486,6 +492,10 @@ public class SimplexAlgorithm {
 				this.updatePundD(e,f, u);
 			
 		}
+		//muss nach s.update gemacht werden glaub ich
+		this.updateKnotenpreise(e, f);
+		e.setReducedCost(0);
+
 		for (Arc a : L) {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
@@ -495,13 +505,23 @@ public class SimplexAlgorithm {
 					- a.getHead().getPrice());
 		}
 		
+		//Knotenpreise ausgeben
+		String knotenpreise= "Knotenpreise:\n";
+		for( Vertex w : g.getVertices()){
+			knotenpreise= knotenpreise + w.getId()+" :  "+ w.getPrice()+"\n";
+		}
+		System.out.println(knotenpreise);
+
 		
-		String test ="Red-Cost:\n";
+		
+		
+	//gibt die reduzierten kosten in L aus
+	 /* String test ="Red-Cost:\n";
 		for(Arc s : L){
 			test= test + s.getTail().getId()+" nach "+s.getHead().getId()+ " : "+ s.getReducedCost()+"\n";
 		}
 		System.out.println(test);
-		
+	*/
 	}
 
 	/*
@@ -531,7 +551,7 @@ public class SimplexAlgorithm {
 			return lastA;
 		}
 
-		for (int i = u.size(); i > 0; i--) {
+		for (int i = u.size()-1; i > 0; i--) {
 			Arc a = u.get(i - 1).getArc(u.get(i));
 			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 				a.setuORv('u');
@@ -570,7 +590,7 @@ public class SimplexAlgorithm {
 			k = l.getHead();
 		}
 		int tiefe = d[k.getId() - 1];
-
+//TODO ich vermute hier muss man die kosten benutzen, nicht reduzierten kosten
 		while (d[k.getId() - 1] >= tiefe) {
 			Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
 
