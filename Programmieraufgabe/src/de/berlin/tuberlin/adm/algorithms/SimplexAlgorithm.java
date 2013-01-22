@@ -790,46 +790,7 @@ public class SimplexAlgorithm {
 		}
 	}
 	
-	//Methode Update S Schritt 3-7
-	private void updateSTeil2(int i, int t2, int e1, int a, int r, int e2, int k, int b){
-		while(true){		
-			//3.Schritt: Ersetze s duch s*
-				if(i==t2){
-					if(e1 != a){
-						s[a-1] = r;
-						s[e1-1] = e2;
-						s[k-1] = b;
-					}
-					else{
-						s[e1-1] = e2;
-						s[k-1] = r;
-					}
-				}
-				else{
-					break;
-				}
-				
-				//4.Schritt
-				int j = i;
-				i = p[i-1];
-				s[k-1] =i;
-				
-				//5.Schritt: Finde letzten Knoten k in linken Teil von Sk
-				k = i;
-				while(s[k-1] != j){
-					if(d[r-1]>d[i-1]){
-						s[k-1] = r;
-						while(d[s[k-1]-1]>d[i-1]){
-							k = s[k-1];
-						}
-						r = s[k-1];
-					}
-					
-					//ACHTUNG
-//					updateSTeil2(i,t2,e1, a, r, e2, k, b);
-				}
-		}
-	}
+	
 
 	private void updatePundD(Arc e, Arc l, List<Vertex> uORv) {
 //		Nur pivot-Weg aendert sich. p=v1,...,vk
