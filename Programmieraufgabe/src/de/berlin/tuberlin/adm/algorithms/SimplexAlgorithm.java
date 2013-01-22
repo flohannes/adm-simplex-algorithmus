@@ -44,7 +44,8 @@ public class SimplexAlgorithm {
 		int i = 0;
 		while(true){
 			Arc e = this.optimalitaetstest();
-			System.out.println(this.toString());
+			//System.out.println(this.toString());
+			System.out.println("Iteration: "+ i);
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
 				break;
@@ -513,12 +514,12 @@ public class SimplexAlgorithm {
 		}
 		
 		//Knotenpreise ausgeben
-		String knotenpreise= "Knotenpreise:\n";
+/*		String knotenpreise= "Knotenpreise:\n";
 		for( Vertex w : g.getVertices()){
 			knotenpreise= knotenpreise + w.getId()+" :  "+ w.getPrice()+"\n";
 		}
 		System.out.println(knotenpreise);
-
+*/
 		
 		
 		
@@ -755,6 +756,7 @@ public class SimplexAlgorithm {
 		//updateSTeil2(i,t2,e1, a, r, e2, k, b);
 		
 		while(true){
+			System.out.println("hier");
 			//3.Schritt: Ersetze s duch s*
 			if(i==t2){
 				if(e1 != a){
@@ -856,7 +858,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/test");
+			Input r = new Input("src/InputData/chvatal0.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 

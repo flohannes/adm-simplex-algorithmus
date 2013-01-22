@@ -37,7 +37,7 @@ public class Input {
 				//Vertex v = new Vertex(Integer.parseInt(inputString[1]));
 				//v.setFlow(Integer.parseInt(inputString[2]));
 				//graph.addVertex(v);
-				graph.getVertexById(Integer.parseInt(inputString[1])).setFlow(Integer.parseInt(inputString[2]));
+				graph.getVertexById(Integer.parseInt(inputString[1])).setFlow(-Integer.parseInt(inputString[2]));
 
 			}
 			else if(inputString[0].startsWith("a")){
