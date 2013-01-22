@@ -529,8 +529,18 @@ public class SimplexAlgorithm {
 	 * obere oder untere Kapazitaetsgrenze erreicht ist
 	 */
 
+	/**
+	 * Findet die aus T + e zu entfernende Kante, mit Anti-Cicling Regel
+	 * war e in L: Laufe den Kreis C vom Scheitel aus in der Orientierung von e durch, und entferne die letzte blockierende Kante
+	 * war e in U: Laufe C entgegengesetzt der Richtung von e durch, entferne ebenfalls die letzte blockierende Kante
+	 * Im Code: Gehe C jeweils in anderer Richtung durch und wähle die erste blockierende Kante
+	 * @param u , der letzte Knoten in u entspricht dem Scheitel von C
+	 * @param v
+	 * @param e
+	 * @return letzte blockierende Kante
+	 */
 	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e) {
-		for (int i = 0; i < v.size() - 1; i++) {
+		/*for (int i = 0; i < v.size() - 1; i++) {
 			Arc a = v.get(i).getArc(v.get(i + 1));
 			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 				a.setuORv('v');
@@ -561,6 +571,67 @@ public class SimplexAlgorithm {
 
 		e.setuORv('e');
 		return e;
+		*/
+		
+		//anti- Cicling
+		if( e.getReducedCost() < 0 ){ //e ist in L gewesen
+			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
+			
+			if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
+				lastA.setuORv('v');
+				return lastA;
+			}
+			
+			for (int i = v.size() -1 ; i > 0 ; i--) {
+				Arc a = v.get(i).getArc(v.get(i - 1));
+				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
+					a.setuORv('v');
+					return a;
+				}
+			}
+			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
+				e.setuORv('e');
+				return e;
+			}
+			for (int i = 0; i < u.size()-1 ; i++) {
+				Arc a = u.get(i).getArc(u.get(i+1));
+				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
+					a.setuORv('u');
+					return a;
+				}
+			}
+				
+		}else{ // e war in U
+			
+			for (int i = u.size()-1; i > 0; i--) {
+				Arc a = u.get(i - 1).getArc(u.get(i));
+				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
+					a.setuORv('u');
+					return a;
+				}
+			}
+			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
+				e.setuORv('e');
+				return e;
+			}
+			for (int i = 0; i < v.size() - 1; i++) {
+				Arc a = v.get(i).getArc(v.get(i + 1));
+				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
+					a.setuORv('v');
+					return a;
+				}
+			}
+			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
+			
+			if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
+				lastA.setuORv('v');
+				return lastA;
+			}
+			
+		}
+		return null; //sollte bei korrektem Code eigentlich nicht vorkommen
+		
+		
 	}
 
 	/**
