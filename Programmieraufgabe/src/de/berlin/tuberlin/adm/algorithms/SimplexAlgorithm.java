@@ -470,9 +470,7 @@ public class SimplexAlgorithm {
 		System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
-			//this.updateKnotenpreise(e, f); //TODO man muss vielleicht erst s updaten bevor man die knkotenpreise updatet!!!
 			T.remove(f);
-			//e.setReducedCost(0);
 			T.add(e);
 			
 			L.remove(e);
@@ -483,7 +481,10 @@ public class SimplexAlgorithm {
 			if (f.getFlowX() == f.getCap())
 				U.add(f);
 		
-		
+			//update Knotenpreise
+			this.updateKnotenpreise(e, f);
+			e.setReducedCost(0);
+			
 			// p,d und s anpassen
 			this.updateS(e, f);
 			if(f.getuORv() == 'v')
@@ -491,18 +492,17 @@ public class SimplexAlgorithm {
 			else if(f.getuORv() == 'u')
 				this.updatePundD(e,f, u);
 			
-		}
-		//muss nach s.update gemacht werden glaub ich
-		this.updateKnotenpreise(e, f);
-		e.setReducedCost(0);
+		
+		
 
-		for (Arc a : L) {
-			a.setReducedCost(a.getCost() + a.getTail().getPrice()
-					- a.getHead().getPrice());
-		}
-		for (Arc a : U) {
-			a.setReducedCost(a.getCost() + a.getTail().getPrice()
-					- a.getHead().getPrice());
+			for (Arc a : L) {
+				a.setReducedCost(a.getCost() + a.getTail().getPrice()
+						- a.getHead().getPrice());
+			}
+			for (Arc a : U) {
+				a.setReducedCost(a.getCost() + a.getTail().getPrice()
+						- a.getHead().getPrice());
+			}
 		}
 		
 		//Knotenpreise ausgeben
@@ -662,11 +662,17 @@ public class SimplexAlgorithm {
 			k = l.getHead();
 		}
 		int tiefe = d[k.getId() - 1];
-		int t2_ID = k.getId();
-		int i= 1;
-//TODO ich vermute hier muss man die kosten benutzen, nicht reduzierten kosten
-		while (d[k.getId() - 1] >= tiefe) {
-			//Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
+		
+		//ein Schritt der unteren While-Schleife außerhalb, um dann als Bedingung " > " benutzten zu koennen (>= funktioniert nicht)
+		if (l.getuORv() == 'u') {
+			k.setPrice(k.getPrice() - e.getReducedCost());
+		} else if (l.getuORv() == 'v') {
+			k.setPrice(k.getPrice() + e.getReducedCost());
+		}
+
+		k = g.getVertexById(s[k.getId() - 1]);
+		
+		while (d[k.getId() - 1] > tiefe) {
 
 			if (l.getuORv() == 'u') {
 				k.setPrice(k.getPrice() - e.getReducedCost()); // yk = yk -
@@ -689,10 +695,9 @@ public class SimplexAlgorithm {
 			}
 
 			k = g.getVertexById(s[k.getId() - 1]); // Knoten k wird geupdated
-			//if( p[k.getId()-1] != t2_ID && i==1) break;// auf Nachfolger von k.
-			//i++;
 		}
 	}
+	
 
 	private void updateS(Arc e, Arc l) {
 		//Initialisierung
