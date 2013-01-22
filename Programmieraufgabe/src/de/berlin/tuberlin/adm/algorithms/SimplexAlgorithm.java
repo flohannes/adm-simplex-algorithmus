@@ -41,14 +41,16 @@ public class SimplexAlgorithm {
 		initialize();
 		// Hier kommen die restlichen Methoden hin
 		// ...
-		for(int i = 0; i < 10; i++){
+		int i = 0;
+		while(true){
 			Arc e = this.optimalitaetstest();
 			System.out.println(this.toString());
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
 				break;
 			}
-			this.augmentieren(e);	
+			this.augmentieren(e);
+			i++;
 		}
 		stopwatch.stop();
 	}
@@ -412,18 +414,20 @@ public class SimplexAlgorithm {
 					a.setFlowX(a.getFlowX() - maxC);
 				}
 			}
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																			// Weg
-																			// im
-																			// Kreis
-																			// zwischen
-																			// un
-																			// und
-																			// vn
-			if (lastA.getHead().equals(u.get(u.size() - 1))) {
-				lastA.setFlowX(lastA.getFlowX() + maxC);
-			} else {
-				lastA.setFlowX(lastA.getFlowX() - maxC);
+			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
+																				// Weg
+																				// im
+																				// Kreis
+																				// zwischen
+																				// un
+																				// und
+																				// vn
+				if (lastA.getHead().equals(u.get(u.size() - 1))) {
+					lastA.setFlowX(lastA.getFlowX() + maxC);
+				} else {
+					lastA.setFlowX(lastA.getFlowX() - maxC);
+				}
 			}
 
 		} else {// e ist aus U
@@ -448,18 +452,21 @@ public class SimplexAlgorithm {
 					a.setFlowX(a.getFlowX() + maxC);
 				}
 			}
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																			// Weg
-																			// im
-																			// Kreis
-																			// zwischen
-																			// un
-																			// und
-																			// vn
-			if (lastA.getHead().equals(u.get(u.size() - 1))) {
-				lastA.setFlowX(lastA.getFlowX() - maxC);
-			} else {
-				lastA.setFlowX(lastA.getFlowX() + maxC);
+			
+			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
+																				// Weg
+																				// im
+																				// Kreis
+																				// zwischen
+																				// un
+																				// und
+																				// vn
+				if (lastA.getHead().equals(u.get(u.size() - 1))) {
+					lastA.setFlowX(lastA.getFlowX() - maxC);
+				} else {
+					lastA.setFlowX(lastA.getFlowX() + maxC);
+				}
 			}
 		}
 		
@@ -575,11 +582,13 @@ public class SimplexAlgorithm {
 		
 		//anti- Cicling
 		if( e.getReducedCost() < 0 ){ //e ist in L gewesen
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
-			
-			if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
-				lastA.setuORv('v');
-				return lastA;
+			if( v.size() != 0){
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
+				
+				if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
+					lastA.setuORv('v');
+					return lastA;
+				}
 			}
 			
 			for (int i = v.size() -1 ; i > 0 ; i--) {
@@ -621,11 +630,13 @@ public class SimplexAlgorithm {
 					return a;
 				}
 			}
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
-			
-			if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
-				lastA.setuORv('v');
-				return lastA;
+			if( v.size() != 0){
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1));
+				
+				if (lastA.getFlowX() == lastA.getCap() || lastA.getFlowX() == lastA.getLow()){
+					lastA.setuORv('v');
+					return lastA;
+				}
 			}
 			
 		}
