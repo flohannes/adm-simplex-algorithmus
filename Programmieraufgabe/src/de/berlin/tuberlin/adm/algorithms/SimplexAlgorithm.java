@@ -592,7 +592,7 @@ public class SimplexAlgorithm {
 		int tiefe = d[k.getId() - 1];
 //TODO ich vermute hier muss man die kosten benutzen, nicht reduzierten kosten
 		while (d[k.getId() - 1] >= tiefe) {
-			Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
+			//Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
 
 			if (l.getuORv() == 'u') {
 				k.setPrice(k.getPrice() - e.getReducedCost()); // yk = yk -
@@ -632,7 +632,8 @@ public class SimplexAlgorithm {
 			t2 = l.getHead().getId();
 		}
 		while(s[a-1] != t2){
-			a = g.getVertexById(s[a-1]).getId();
+			//a = g.getVertexById(s[a-1]).getId();
+			a = s[a-1];
 		}
 		
 		int b;
@@ -640,7 +641,7 @@ public class SimplexAlgorithm {
 		int e2;
 		int i;
 		
-		if (l.getuORv() == 'u') {
+		if (l.getuORv() == 'v') {
 			b = s[e.getTail().getId()-1];
 			e1 = e.getTail().getId();
 			e2 = e.getHead().getId();
@@ -660,7 +661,42 @@ public class SimplexAlgorithm {
 		}
 		int r = s[k-1];
 		
-		updateSTeil2(i,t2,e1, a, r, e2, k, b);
+		//updateSTeil2(i,t2,e1, a, r, e2, k, b);
+		
+		while(true){
+			//3.Schritt: Ersetze s duch s*
+			if(i==t2){
+				if(e1 != a){
+					s[a-1] = r;
+					s[e1-1] = e2;
+					s[k-1] = b;
+				}
+				else{
+					s[e1-1] = e2;
+					s[k-1] = r;
+				}
+				break;
+			}else{
+				
+				//4.Schritt
+				int j = i;
+				i = p[i-1];
+				s[k-1] =i;
+				
+				//5.Schritt: Finde letzten Knoten k in linken Teil von Sk
+				k = i;
+				while(s[k-1] != j){
+					if(d[r-1]>d[i-1]){
+						s[k-1] = r;
+						while(d[s[k-1]-1]>d[i-1]){
+							k = s[k-1];
+						}
+						r = s[k-1];
+					}
+				}
+				
+			}
+		}
 	}
 	
 	//Methode Update S Schritt 3-7
