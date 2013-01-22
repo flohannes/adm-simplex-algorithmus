@@ -219,7 +219,7 @@ public class SimplexAlgorithm {
 				
 		}
 		System.out.println(e.getTail().getId() + " nach " + e.getHead().getId());
-		T.add(e);
+		//T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
@@ -591,6 +591,8 @@ public class SimplexAlgorithm {
 			k = l.getHead();
 		}
 		int tiefe = d[k.getId() - 1];
+		int t2_ID = k.getId();
+		int i= 1;
 //TODO ich vermute hier muss man die kosten benutzen, nicht reduzierten kosten
 		while (d[k.getId() - 1] >= tiefe) {
 			//Arc a = this.g.getVertexById(p[k.getId() - 1]).getArc(k);
@@ -616,7 +618,8 @@ public class SimplexAlgorithm {
 			}
 
 			k = g.getVertexById(s[k.getId() - 1]); // Knoten k wird geupdated
-													// auf Nachfolger von k.
+			//if( p[k.getId()-1] != t2_ID && i==1) break;// auf Nachfolger von k.
+			//i++;
 		}
 	}
 
@@ -779,17 +782,25 @@ public class SimplexAlgorithm {
 	
 	//print out p d s
 	public String toString(){
-		String pds= "p:\n[";
+		String pds= "p: [";
 		for( int i : this.p) pds = pds+ i +" ;";
-		//pds = pds.substring(0, pds.length()-1);
-		pds = pds+ "]\nd:\n[";
+		pds = pds+ "]\nd: [";
 		
 		for( int i : this.d) pds = pds+ i+" ;";
+		pds = pds+ "]\ns: [";
 		
-		pds = pds+ "]\ns:\n[";
 		for( int i : this.s) pds = pds+ i+" ;";
+		pds = pds +"]\nT: [";
 		
+		for(Arc a : T) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
+		pds = pds +"]\nL: [";
+		
+		for(Arc a : L) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
+		pds = pds +"]\nU: [";
+		
+		for(Arc a : U) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
 		pds = pds +"]";
+
 
 		return pds;
 	}
