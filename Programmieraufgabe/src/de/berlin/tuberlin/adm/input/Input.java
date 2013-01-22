@@ -24,7 +24,7 @@ public class Input {
 		//graph = new Graph();
 		BufferedReader in = new BufferedReader(new FileReader(path));
 		String zeile = null;
-		zeile = in.readLine();
+		//zeile = in.readLine();
 		String[] inputString;
 		while ((zeile = in.readLine()) != null) {
 			inputString = zeile.split(" ");

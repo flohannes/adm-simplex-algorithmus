@@ -572,6 +572,7 @@ public class SimplexAlgorithm {
 	 * 
 	 */
 	private void updateKnotenpreise(Arc e, Arc l) {
+		System.out.println("reduzierte kosten von e: "+e.getReducedCost());
 		Vertex k;
 		if (d[l.getTail().getId() - 1] > d[l.getHead().getId() - 1]) { // Waehlt
 																		// Endknoten
