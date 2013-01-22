@@ -221,7 +221,8 @@ public class SimplexAlgorithm {
 			System.out.println("e.head ist null");
 				
 		}
-		System.out.println(e.getTail().getId() + " nach " + e.getHead().getId());
+		System.out.println("entering arc: "+e.getTail().getId() +
+								" nach " + e.getHead().getId());
 		//T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
@@ -655,7 +656,6 @@ public class SimplexAlgorithm {
 	 * 
 	 */
 	private void updateKnotenpreise(Arc e, Arc l) {
-		System.out.println("reduzierte kosten von e: "+e.getReducedCost());
 		Vertex k;
 		if (d[l.getTail().getId() - 1] > d[l.getHead().getId() - 1]) { // Waehlt
 																		// Endknoten
@@ -769,7 +769,6 @@ public class SimplexAlgorithm {
 				}
 				break;
 			}else{
-				
 				//4.Schritt
 				int j = i;
 				i = p[i-1];
@@ -784,7 +783,7 @@ public class SimplexAlgorithm {
 							k = s[k-1];
 						}
 						r = s[k-1];
-					}else break;
+					}else break; // keine ahnung ob das richtig ist
 				}
 				
 			}
