@@ -784,7 +784,7 @@ public class SimplexAlgorithm {
 							k = s[k-1];
 						}
 						r = s[k-1];
-					}
+					}else break;
 				}
 				
 			}
@@ -853,17 +853,31 @@ public class SimplexAlgorithm {
 
 		return pds;
 	}
+	
+	public int calculateObjective(){
+		
+		int cost = 0;
+		for( Vertex v : g.getVertices()){
+			for( Arc a : v.getDeltaPlus()){
+				cost += a.getFlowX() * a.getCost();
+			}
+		}
+		
+		return cost;
+		//return Integer.MIN_VALUE;
+	}
 
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/chvatal1.net");
+			Input r = new Input("src/InputData/chvatal0.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
 			// sim.initialize();
 			sim.startOptimierung();
 
+			System.out.println("Kosten insgesamt: "+ sim.calculateObjective());
 			System.out.println(sim.getGraph().toString());
 			// sim.startOptimierung();
 			// System.out.println(sim.getGraph().toString());
