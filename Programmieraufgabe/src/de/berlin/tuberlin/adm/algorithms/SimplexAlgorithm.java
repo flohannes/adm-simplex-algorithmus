@@ -777,15 +777,15 @@ public class SimplexAlgorithm {
 				//5.Schritt: Finde letzten Knoten k in linken Teil von Sk
 				k = i;
 				while(s[k-1] != j){
-					if(d[r-1]>d[i-1]){
-						s[k-1] = r;
-						while(d[s[k-1]-1]>d[i-1]){
-							k = s[k-1];
-						}
-						r = s[k-1];
-					}else break; // keine ahnung ob das richtig ist
+					k = s[k-1]; // keine ahnung ob das richtig ist
 				}
-				
+				if(d[r-1]>d[i-1]){
+					s[k-1] = r;
+					while(d[s[k-1]-1]>d[i-1]){
+						k = s[k-1];
+					}
+					r = s[k-1];
+				}
 			}
 		}
 	}
@@ -869,7 +869,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/chvatal0.net");
+			Input r = new Input("src/InputData/stndrd1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
