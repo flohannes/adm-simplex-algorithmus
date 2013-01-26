@@ -36,11 +36,12 @@ public class SimplexAlgorithm {
 		this.stopwatch = new Stopwatch();
 	}
 
+	/**
+	 * Optimiert die Baumloesung
+	 */
 	public void startOptimierung() {
 		stopwatch.start();
 		initialize();
-		// Hier kommen die restlichen Methoden hin
-		// ...
 		int i = 0;
 		while(true){
 			Arc e = this.optimalitaetstest();
@@ -59,7 +60,8 @@ public class SimplexAlgorithm {
 	}
 
 	/**
-	 * Step 1: Initalisierung
+	 * Initalisierung
+	 * Konstruiert eine zulaessige Baumloesung gemaess der Vorlesung
 	 */
 	public void initialize() {
 		L = new ArrayList<Arc>();
@@ -154,6 +156,12 @@ public class SimplexAlgorithm {
 
 	}
 
+	/**
+	 * Testet die Baumloesung auf Optimalitaet
+	 * Falls nicht optimal, wird eine Kante zurueckgegeben, durch die die Kosten gesenkt werden koennen
+	 * sonst null
+	 * @return null oder eine Kante e
+	 */
 	private Arc optimalitaetstest() {
 		for (Arc a : L) {
 			if (a.getReducedCost() < 0) {
@@ -210,7 +218,11 @@ public class SimplexAlgorithm {
 		
 	}
 	
-
+	/**
+	 * Findet den Kreis C in T + e und augmentiert darauf
+	 * Aktualisiert am Ende die Baumloesung
+	 * @param e entering arc
+	 */
 	private void augmentieren(Arc e) {
 		
 		System.out.println("entering arc: "+e.getTail().getId() +
@@ -298,90 +310,8 @@ public class SimplexAlgorithm {
 		}
 		
 		
-		//System.out.println("Hier ist maxC: "+maxC);
 
-/*		if (e.getReducedCost() < 0) {// e ist aus L
-			for (int p = 0; p < v.size() - 1; p++) { // maxC finden. Weg von v0
-														// bis vn
-				Arc a = v.get(p).getArc(v.get(p + 1));
-				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
-					if (maxC > a.getCap() - a.getFlowX()) {
-						maxC = a.getCap() - a.getFlowX();
-					}
-				} else { // Rueckwaertsbogen
-					if (maxC > a.getFlowX() - a.getLow()) {
-						maxC = a.getFlowX() - a.getLow();
-					}
-				}
-			}
-			for (int p = 0; p < u.size() - 1; p++) { // weiterhin maxC finden.
-														// Weg von u0 bis un
-														// durchlafen
-				Arc a = u.get(p).getArc(u.get(p + 1));
-				if (a.getHead().equals(u.get(p))) {
-					if (maxC > a.getCap() - a.getFlowX()) {
-						maxC = a.getCap() - a.getFlowX();
-					}
-				} else {
-					if (maxC > a.getFlowX() - a.getLow()) {
-						maxC = a.getFlowX() - a.getLow();
-					}
-				}
-			}
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																		
-			if (lastA.getHead().equals(u.get(u.size() - 1))) {
-				if (maxC > lastA.getCap() - lastA.getFlowX()) {
-					maxC = lastA.getCap() - lastA.getFlowX();
-				}
-			} else {
-				if (maxC > lastA.getFlowX() - lastA.getLow()) {
-					maxC = lastA.getFlowX() - lastA.getLow();
-				}
-			}
-
-		} else {// e ist aus U
-			for (int p = 0; p < v.size() - 1; p++) { // maxC finden. Weg von v0
-														// bis vn
-				Arc a = v.get(p).getArc(v.get(p + 1));
-				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
-					if (maxC > a.getFlowX() - a.getLow()) {
-						maxC = a.getFlowX() - a.getLow();
-					}
-				} else { // Rueckwaertsbogen
-					if (maxC > a.getCap() - a.getFlowX()) {
-						maxC = a.getCap() - a.getFlowX();
-					}
-				}
-			}
-			for (int p = 0; p < u.size() - 1; p++) { // weiterhin maxC finden.
-														// Weg von u0 bis un
-														// durchlafen
-				Arc a = u.get(p).getArc(u.get(p + 1));
-				if (a.getHead().equals(u.get(p))) {
-					if (maxC > a.getFlowX() - a.getLow()) {
-						maxC = a.getFlowX() - a.getLow();
-					}
-				} else {
-					if (maxC > a.getCap() - a.getFlowX()) {
-						maxC = a.getCap() - a.getFlowX();
-					}
-				}
-			}
-			Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-
-			if (lastA.getHead().equals(u.get(u.size() - 1))) {
-				if (maxC > lastA.getFlowX() - lastA.getLow()) {
-					maxC = lastA.getFlowX() - lastA.getLow();
-				}
-			} else {
-				if (maxC > lastA.getCap() - lastA.getFlowX()) {
-					maxC = lastA.getCap() - lastA.getFlowX();
-				}
-			}
-		}
-*/
-		/**
+		/*
 		 * Augmentieren: Nochmal den Kreis durchgehen und schauen obs in U oder
 		 * L ist.
 		 */
@@ -488,11 +418,9 @@ public class SimplexAlgorithm {
 			// p,d und s anpassen
 			this.updateS(e, f);
 			if(f.getuORv() == 'v'){
-				this.updatePundD(e,f, v);
-				//this.updateD(e, f, v);
+				this.updateP(e,f, v);
 			}else if(f.getuORv() == 'u'){
-				this.updatePundD(e,f, u);
-				//this.updateD(e, f, u);
+				this.updateP(e,f, u);
 			}
 			
 		
@@ -534,11 +462,6 @@ public class SimplexAlgorithm {
 	*/
 	}
 
-	/*
-	 * Helper fuer augmentieren() Findet Kante in V oder U, bei welcher die
-	 * obere oder untere Kapazitaetsgrenze erreicht ist
-	 */
-
 	/**
 	 * Findet die aus T + e zu entfernende Kante, mit Anti-Cicling Regel
 	 * war e in L: Laufe den Kreis C vom Scheitel aus in der Orientierung von e durch, und entferne die letzte blockierende Kante
@@ -550,38 +473,6 @@ public class SimplexAlgorithm {
 	 * @return letzte blockierende Kante
 	 */
 	private Arc findF(List<Vertex> u, List<Vertex> v, Arc e) {
-		/*for (int i = 0; i < v.size() - 1; i++) {
-			Arc a = v.get(i).getArc(v.get(i + 1));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
-				a.setuORv('v');
-				return a;
-			}
-		}
-		Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); // letzten
-																		// Weg
-																		// im
-																		// Kreis
-																		// zwischen
-																		// un
-																		// und
-																		// vn
-		if (lastA.getFlowX() == lastA.getCap()
-				|| lastA.getFlowX() == lastA.getLow()){
-			lastA.setuORv('v');
-			return lastA;
-		}
-
-		for (int i = u.size()-1; i > 0; i--) {
-			Arc a = u.get(i - 1).getArc(u.get(i));
-			if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
-				a.setuORv('u');
-				return a;
-			}
-		}
-
-		e.setuORv('e');
-		return e;
-		*/
 		
 		//anti- Cicling
 		if( e.getReducedCost() < 0 ){ //e ist in L gewesen
@@ -715,12 +606,16 @@ public class SimplexAlgorithm {
 		}
 	}
 	
-
+	/**
+	 * Aktualisiert die Array d und s
+	 * @param e entering arc
+	 * @param l leaving arc
+	 */
 	private void updateS(Arc e, Arc l) {
+		//delta ist der Wert, um den sich die Tiefe des einen Endknoten von e aendert
 		int delta;
 		if(l.getuORv() == 'u'){
 			delta = (d[e.getHead().getId() - 1] +1) - d[e.getTail().getId() -1];
-			//d[e.getTail().getId() -1] = d[e.getHead().getId() - 1] +1;
 		}else{
 			delta = (d[e.getTail().getId() - 1] +1) - d[e.getHead().getId() -1];
 		}
@@ -739,7 +634,6 @@ public class SimplexAlgorithm {
 			t2 = l.getHead().getId();
 		}
 		while(s[a-1] != t2){
-			//a = g.getVertexById(s[a-1]).getId();
 			a = s[a-1];
 		}
 		
@@ -766,15 +660,15 @@ public class SimplexAlgorithm {
 		while(d[s[k-1]-1] > d[i-1]){
 			k = s[k-1];
 			
-			//TODO probe
+			//alle Knoten in S1 aendern sich ebenfalls um delta
 			d[k-1] += delta;
 		}
-		//probe
+		//i ist hier einer der endknoten von e
 		d[i-1] += delta;
 		
 		int r = s[k-1];
 		
-		//updateSTeil2(i,t2,e1, a, r, e2, k, b);
+		//counter gibt an in welchen S wir gerade sind
 		int counter = 1;
 		while(true){
 			//3.Schritt: Ersetze s duch s*
@@ -800,24 +694,20 @@ public class SimplexAlgorithm {
 				while(s[k-1] != j){
 					k = s[k-1];
 					
-					//TODO probe
+					//delta_k = delta_k-1 *2
 					d[k-1] += delta +counter*2;
 				}
-				
-				
 				
 				if(d[r-1]>d[i-1]){
 					s[k-1] = r;
 					while(d[s[k-1]-1]>d[i-1]){
 						k = s[k-1];
 						
-						//probe
 						d[k-1] += delta +counter*2;
 					}
 					r = s[k-1];
 				}
 				
-				//probe
 				d[i-1] += delta + counter*2;
 				counter++;
 			}
@@ -825,9 +715,14 @@ public class SimplexAlgorithm {
 	}
 	
 	
-
-	private void updatePundD(Arc e, Arc l, List<Vertex> uORv) {
-//		Nur pivot-Weg aendert sich. p=v1,...,vk
+	/**
+	 * Aktualisiert p
+	 * @param e entering arc
+	 * @param l leaving arc
+	 * @param uORv -der Teilweg bis zum Scheitel des Kreises, in dem l ist
+	 */
+	private void updateP(Arc e, Arc l, List<Vertex> uORv) {
+		//Nur pivot-Weg aendert sich. p=v1,...,vk
 		
 		//v koennte auch leer sein deshalb der erste schritt schon außerhalb der schleife
 		if(l.getuORv() == 'u'){
@@ -837,83 +732,13 @@ public class SimplexAlgorithm {
 		}
 		
 		for(int i = 1; i < uORv.size(); i++){
-			
-/*			if( d[l.getTail().getId() -1] > d[l.getHead().getId() -1]){
-				if( l.getHead().getId() == uORv.get(i).getId() ){
-					break;
-				}
-			}else{
-				System.out.println("hallo");
 
-				if( l.getTail().getId() == uORv.get(i).getId() ){
-					break;
-				}
-			}
-			p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
-*/
+			//falls wir den leaving arc erreicht haben, break
 			if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
 				if( l.getTail().getId() == uORv.get(i-1).getId() || l.getHead().getId() == uORv.get(i-1).getId() )
 				break;
 			}
-			p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
-			
-				//d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
-				
-				
-				
-			
-		}
-	}
-	
-	private void updateD (Arc e , Arc l , List<Vertex> uORv){
-		
-		int delta;
-		boolean stop = true;
-		
-		if(l.getuORv() == 'u'){
-			delta = (d[e.getHead().getId() - 1] +1) - d[e.getTail().getId() -1];
-			//d[e.getTail().getId() -1] = d[e.getHead().getId() - 1] +1;
-		}else{
-			delta = (d[e.getTail().getId() - 1] +1) - d[e.getHead().getId() -1];
-		}
-		
-		int k;
-		int tiefe;
-		
-		if( uORv.size() == 0){
-			//der fall tritt nur ein wenn uORv v ist, dann betrachten wir den Head
-			k = e.getHead().getId();
-			tiefe = d[k-1];
-			d[k-1] = d[k-1] + delta;
-			while ( d[s[k-1]-1] > tiefe){
-				k= s[k-1];
-				d[k-1] = d[k-1] + delta;
-			}
-		}else{
-		
-			for( int i=0 ; i< uORv.size() -1 ; i++){
-				k = uORv.get(i).getId();
-				tiefe = d[k-1];
-				d[k-1] = d[k-1]+delta;
-				while( /*s[k-1] != uORv.get(i+1).getId() &&*/ d[s[k-1]-1] > tiefe && p[s[k-1]-1] != p[k-1]){
-					k = s[k-1];
-					d[k-1] = d[k-1]+delta;
-				}
-				delta = delta + 2;
-				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
-					stop = false;	
-					break;
-				}
-			}
-			if( stop ){
-				k = uORv.get(uORv.size()-1).getId();
-				tiefe = d[k-1];
-				d[k-1] = d[k-1] +delta;
-				while ( d[s[k-1]-1] > tiefe && p[s[k-1]-1] != p[k-1]){
-					k= s[k-1];
-					d[k-1] = d[k-1] + delta;
-				}
-			}
+			p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();	
 		}
 	}
 
@@ -926,7 +751,9 @@ public class SimplexAlgorithm {
 		return g;
 	}
 	
-	//print out p d s
+	/**
+	 * Gibt die Arrays p, d und s aus,  sowie die Kantenmengen T, L und U
+	 */
 	public String toString(){
 		String pds= "p: [";
 		for( int i : this.p) pds = pds+ i +" ;";
@@ -951,6 +778,10 @@ public class SimplexAlgorithm {
 		return pds;
 	}
 	
+	/**
+	 * Berechnet die Gesamtkosten
+	 * @return Kosten des Flusses
+	 */
 	public int calculateObjective(){
 		
 		int cost = 0;
@@ -962,6 +793,13 @@ public class SimplexAlgorithm {
 		
 		return cost;
 		//return Integer.MIN_VALUE;
+	}
+	
+	/**
+	 * Rekonstruiert den ursprünglichen Graphen, d.h. der Knoten k wird wieder entfernt
+	 */
+	public void reconstruct(){
+		this.g.getVertices().remove(NumberOfNodes);
 	}
 
 	public static void main(String[] args) {
