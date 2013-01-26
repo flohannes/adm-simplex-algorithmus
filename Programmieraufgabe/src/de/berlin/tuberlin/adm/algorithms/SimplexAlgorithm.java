@@ -796,7 +796,11 @@ public class SimplexAlgorithm {
 		}
 		for(int i = 1; i < uORv.size(); i++){
 			
-				if(i == 0){
+				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
+					break;
+				}
+			
+/*				if(i == 0){
 					if(l.getuORv() == 'u'){
 						p[uORv.get(i).getId()-1] = e.getHead().getId();
 						//d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
@@ -806,15 +810,12 @@ public class SimplexAlgorithm {
 						//d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
 					}
 				}
-				
+*/				
 				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
 				//d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
 				
 				
-				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
-				//if(l.getTail().getId() == p[uORv.get(i).getId()-1] || l.getHead().getId() == p[uORv.get(i).getId()-1] ){
-					break;
-				}
+				
 			
 		}
 	}
@@ -849,7 +850,7 @@ public class SimplexAlgorithm {
 				k = uORv.get(i).getId();
 				tiefe = d[k-1];
 				d[k-1] = d[k-1]+delta;
-				while( s[k-1] != uORv.get(i+1).getId() && d[s[k-1]-1] > tiefe ){
+				while( /*s[k-1] != uORv.get(i+1).getId() &&*/ d[s[k-1]-1] > tiefe && p[s[k-1]-1] != p[k-1]){
 					k = s[k-1];
 					d[k-1] = d[k-1]+delta;
 				}
@@ -863,7 +864,7 @@ public class SimplexAlgorithm {
 				k = uORv.get(uORv.size()-1).getId();
 				tiefe = d[k-1];
 				d[k-1] = d[k-1] +delta;
-				while ( d[s[k-1]-1] > tiefe){
+				while ( d[s[k-1]-1] > tiefe && p[s[k-1]-1] != p[k-1]){
 					k= s[k-1];
 					d[k-1] = d[k-1] + delta;
 				}
@@ -921,7 +922,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/chvatal0.net");
+			Input r = new Input("src/InputData/chvatal1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
