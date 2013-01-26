@@ -44,9 +44,10 @@ public class SimplexAlgorithm {
 		int i = 0;
 		while(true){
 			Arc e = this.optimalitaetstest();
-			System.out.println(this.toString());
-			System.out.println("Iteration: "+ i);
-			if(i==20)break;
+			//System.out.println(this.toString());
+			//System.out.println("Iteration: "+ i);
+			//System.out.println("Kosten: "+ this.calculateObjective());
+			//if(i==20)break;
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
 				break;
@@ -380,8 +381,6 @@ public class SimplexAlgorithm {
 			}
 		}
 */
-		System.out.println("max " + maxC);
-
 		/**
 		 * Augmentieren: Nochmal den Kreis durchgehen und schauen obs in U oder
 		 * L ist.
@@ -602,11 +601,11 @@ public class SimplexAlgorithm {
 					return a;
 				}
 			}
-			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
+/*			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
 				e.setuORv('e');
 				return e;
 			}
-			for (int i = 0; i < u.size()-1 ; i++) {
+*/			for (int i = 0; i < u.size()-1 ; i++) {
 				Arc a = u.get(i).getArc(u.get(i+1));
 				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 					a.setuORv('u');
@@ -623,11 +622,11 @@ public class SimplexAlgorithm {
 					return a;
 				}
 			}
-			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
+/*			if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
 				e.setuORv('e');
 				return e;
 			}
-			for (int i = 0; i < v.size() - 1; i++) {
+*/			for (int i = 0; i < v.size() - 1; i++) {
 				Arc a = v.get(i).getArc(v.get(i + 1));
 				if (a.getFlowX() == a.getCap() || a.getFlowX() == a.getLow()) {
 					a.setuORv('v');
@@ -643,6 +642,10 @@ public class SimplexAlgorithm {
 				}
 			}
 			
+		}
+		if(e.getFlowX() == e.getLow() || e.getCap() == e.getFlowX()){
+			e.setuORv('e');
+			return e;
 		}
 		return null; //sollte bei korrektem Code eigentlich nicht vorkommen
 		
@@ -948,9 +951,9 @@ public class SimplexAlgorithm {
 		return pds;
 	}
 	
-	public int calculateObjective(){
+	public double calculateObjective(){
 		
-		int cost = 0;
+		double cost = 0;
 		for( Vertex v : g.getVertices()){
 			for( Arc a : v.getDeltaPlus()){
 				cost += a.getFlowX() * a.getCost();
@@ -964,7 +967,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/chvatal0.net");
+			Input r = new Input("src/InputData/stndrd1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
@@ -972,7 +975,7 @@ public class SimplexAlgorithm {
 			sim.startOptimierung();
 
 			System.out.println("Kosten insgesamt: "+ sim.calculateObjective());
-			System.out.println(sim.getGraph().toString());
+			//System.out.println(sim.getGraph().toString());
 			// sim.startOptimierung();
 			// System.out.println(sim.getGraph().toString());
 			// System.out.println("Time for readin ms: " +
