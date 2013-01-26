@@ -44,7 +44,7 @@ public class SimplexAlgorithm {
 		int i = 0;
 		while(true){
 			Arc e = this.optimalitaetstest();
-			//System.out.println(this.toString());
+			System.out.println(this.toString());
 			System.out.println("Iteration: "+ i);
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
@@ -210,17 +210,7 @@ public class SimplexAlgorithm {
 	
 
 	private void augmentieren(Arc e) {
-		if(e == null){
-			System.out.println("e ist null");
-		}
-		else if(e.getTail() == null){
-			System.out.println("e.tail ist null");
-				
-		}
-		else if(e.getHead() == null){
-			System.out.println("e.head ist null");
-				
-		}
+		
 		System.out.println("entering arc: "+e.getTail().getId() +
 								" nach " + e.getHead().getId());
 		//T.add(e);
@@ -496,10 +486,13 @@ public class SimplexAlgorithm {
 			
 			// p,d und s anpassen
 			this.updateS(e, f);
-			if(f.getuORv() == 'v')
+			if(f.getuORv() == 'v'){
 				this.updatePundD(e,f, v);
-			else if(f.getuORv() == 'u')
+				//this.updateD(e, f, v);
+			}else if(f.getuORv() == 'u'){
 				this.updatePundD(e,f, u);
+				//this.updateD(e, f, u);
+			}
 			
 		
 		
@@ -777,7 +770,7 @@ public class SimplexAlgorithm {
 				//5.Schritt: Finde letzten Knoten k in linken Teil von Sk
 				k = i;
 				while(s[k-1] != j){
-					k = s[k-1]; // keine ahnung ob das richtig ist
+					k = s[k-1];
 				}
 				if(d[r-1]>d[i-1]){
 					s[k-1] = r;
@@ -794,7 +787,14 @@ public class SimplexAlgorithm {
 
 	private void updatePundD(Arc e, Arc l, List<Vertex> uORv) {
 //		Nur pivot-Weg aendert sich. p=v1,...,vk
-		for(int i = 0; i < uORv.size(); i++){
+		
+		//v koennte auch leer sein deshalb der erste schritt schon außerhalb der schleife
+		if(l.getuORv() == 'u'){
+			p[e.getTail().getId() -1] = e.getHead().getId();
+		}else{
+			p[e.getHead().getId() -1] = e.getTail().getId();
+		}
+		for(int i = 1; i < uORv.size(); i++){
 			
 				if(i == 0){
 					if(l.getuORv() == 'u'){
@@ -806,16 +806,68 @@ public class SimplexAlgorithm {
 						d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
 					}
 				}
-				else{
-					p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
-					d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
-				}
+				
+				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
+				d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
+				
 				
 				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
 				//if(l.getTail().getId() == p[uORv.get(i).getId()-1] || l.getHead().getId() == p[uORv.get(i).getId()-1] ){
 					break;
 				}
 			
+		}
+	}
+	
+	private void updateD (Arc e , Arc l , List<Vertex> uORv){
+		
+		int delta;
+		boolean stop = true;
+		
+		if(l.getuORv() == 'u'){
+			delta = (d[e.getHead().getId() - 1] +1) - d[e.getTail().getId() -1];
+			//d[e.getTail().getId() -1] = d[e.getHead().getId() - 1] +1;
+		}else{
+			delta = (d[e.getTail().getId() - 1] +1) - d[e.getHead().getId() -1];
+		}
+		
+		int k;
+		int tiefe;
+		
+		if( uORv.size() == 0){
+			//der fall tritt nur ein wenn uORv v ist, dann betrachten wir den Head
+			k = e.getHead().getId();
+			tiefe = d[k-1];
+			d[k-1] = d[k-1] + delta;
+			while ( d[s[k-1]-1] > tiefe){
+				k= s[k-1];
+				d[k-1] = d[k-1] + delta;
+			}
+		}else{
+		
+			for( int i=0 ; i< uORv.size() -1 ; i++){
+				k = uORv.get(i).getId();
+				tiefe = d[k-1];
+				d[k-1] = d[k-1]+delta;
+				while( s[k-1] != uORv.get(i+1).getId() && d[s[k-1]-1] > tiefe ){
+					k = s[k-1];
+					d[k-1] = d[k-1]+delta;
+				}
+				delta = delta + 2;
+				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
+					stop = false;	
+					break;
+				}
+			}
+			if( stop ){
+				k = uORv.get(uORv.size()-1).getId();
+				tiefe = d[k-1];
+				d[k-1] = d[k-1] +delta;
+				while ( d[s[k-1]-1] > tiefe){
+					k= s[k-1];
+					d[k-1] = d[k-1] + delta;
+				}
+			}
 		}
 	}
 
@@ -869,7 +921,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/stndrd1.net");
+			Input r = new Input("src/InputData/chvatal0.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
