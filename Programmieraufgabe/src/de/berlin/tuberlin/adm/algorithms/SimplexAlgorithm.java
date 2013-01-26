@@ -46,6 +46,7 @@ public class SimplexAlgorithm {
 			Arc e = this.optimalitaetstest();
 			System.out.println(this.toString());
 			System.out.println("Iteration: "+ i);
+			if(i==20)break;
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
 				break;
@@ -488,10 +489,10 @@ public class SimplexAlgorithm {
 			this.updateS(e, f);
 			if(f.getuORv() == 'v'){
 				this.updatePundD(e,f, v);
-				this.updateD(e, f, v);
+				//this.updateD(e, f, v);
 			}else if(f.getuORv() == 'u'){
 				this.updatePundD(e,f, u);
-				this.updateD(e, f, u);
+				//this.updateD(e, f, u);
 			}
 			
 		
@@ -505,6 +506,12 @@ public class SimplexAlgorithm {
 				a.setReducedCost(a.getCost() + a.getTail().getPrice()
 						- a.getHead().getPrice());
 			}
+		}else{//e == f
+			//e wieder in L ode U einfuegen
+			if (e.getFlowX() == e.getLow())
+				L.add(f);
+			else
+				U.add(e);
 		}
 		
 		//Knotenpreise ausgeben
@@ -705,6 +712,16 @@ public class SimplexAlgorithm {
 	
 
 	private void updateS(Arc e, Arc l) {
+		int delta;
+		if(l.getuORv() == 'u'){
+			delta = (d[e.getHead().getId() - 1] +1) - d[e.getTail().getId() -1];
+			//d[e.getTail().getId() -1] = d[e.getHead().getId() - 1] +1;
+		}else{
+			delta = (d[e.getTail().getId() - 1] +1) - d[e.getHead().getId() -1];
+		}
+		
+		
+		
 		//Initialisierung
 		int a;
 		int t2;
@@ -743,11 +760,17 @@ public class SimplexAlgorithm {
 		int k = i;
 		while(d[s[k-1]-1] > d[i-1]){
 			k = s[k-1];
+			
+			//TODO probe
+			d[k-1] += delta;
 		}
+		//probe
+		d[i-1] += delta;
+		
 		int r = s[k-1];
 		
 		//updateSTeil2(i,t2,e1, a, r, e2, k, b);
-		
+		int counter = 1;
 		while(true){
 			//3.Schritt: Ersetze s duch s*
 			if(i==t2){
@@ -771,14 +794,27 @@ public class SimplexAlgorithm {
 				k = i;
 				while(s[k-1] != j){
 					k = s[k-1];
+					
+					//TODO probe
+					d[k-1] += delta +counter*2;
 				}
+				
+				
+				
 				if(d[r-1]>d[i-1]){
 					s[k-1] = r;
 					while(d[s[k-1]-1]>d[i-1]){
 						k = s[k-1];
+						
+						//probe
+						d[k-1] += delta +counter*2;
 					}
 					r = s[k-1];
 				}
+				
+				//probe
+				d[i-1] += delta + counter*2;
+				counter++;
 			}
 		}
 	}
@@ -794,24 +830,28 @@ public class SimplexAlgorithm {
 		}else{
 			p[e.getHead().getId() -1] = e.getTail().getId();
 		}
+		
 		for(int i = 1; i < uORv.size(); i++){
 			
-				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
+/*			if( d[l.getTail().getId() -1] > d[l.getHead().getId() -1]){
+				if( l.getHead().getId() == uORv.get(i).getId() ){
 					break;
 				}
-			
-/*				if(i == 0){
-					if(l.getuORv() == 'u'){
-						p[uORv.get(i).getId()-1] = e.getHead().getId();
-						//d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
-					}
-					else{ //l in v
-						p[uORv.get(i).getId()-1] = e.getTail().getId();
-						//d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
-					}
+			}else{
+				System.out.println("hallo");
+
+				if( l.getTail().getId() == uORv.get(i).getId() ){
+					break;
 				}
-*/				
-				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
+			}
+			p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
+*/
+			if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
+				if( l.getTail().getId() == uORv.get(i-1).getId() || l.getHead().getId() == uORv.get(i-1).getId() )
+				break;
+			}
+			p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
+			
 				//d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
 				
 				
@@ -922,7 +962,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/chvatal1.net");
+			Input r = new Input("src/InputData/chvatal0.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			System.out.println(sim.getGraph().toString());
 
