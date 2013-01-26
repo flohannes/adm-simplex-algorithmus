@@ -488,10 +488,10 @@ public class SimplexAlgorithm {
 			this.updateS(e, f);
 			if(f.getuORv() == 'v'){
 				this.updatePundD(e,f, v);
-				//this.updateD(e, f, v);
+				this.updateD(e, f, v);
 			}else if(f.getuORv() == 'u'){
 				this.updatePundD(e,f, u);
-				//this.updateD(e, f, u);
+				this.updateD(e, f, u);
 			}
 			
 		
@@ -799,16 +799,16 @@ public class SimplexAlgorithm {
 				if(i == 0){
 					if(l.getuORv() == 'u'){
 						p[uORv.get(i).getId()-1] = e.getHead().getId();
-						d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
+						//d[uORv.get(i).getId()-1] = d[e.getHead().getId()-1] + 1;
 					}
 					else{ //l in v
 						p[uORv.get(i).getId()-1] = e.getTail().getId();
-						d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
+						//d[uORv.get(i).getId()-1] = d[e.getTail().getId()-1] + 1;
 					}
 				}
 				
 				p[uORv.get(i).getId()-1] = uORv.get(i-1).getId();
-				d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
+				//d[uORv.get(i).getId()-1] = d[uORv.get(i-1).getId()-1] + 1;
 				
 				
 				if( l.getTail().getId() == uORv.get(i).getId() || l.getHead().getId() == uORv.get(i).getId()){
