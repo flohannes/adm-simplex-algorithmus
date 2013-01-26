@@ -951,9 +951,9 @@ public class SimplexAlgorithm {
 		return pds;
 	}
 	
-	public double calculateObjective(){
+	public int calculateObjective(){
 		
-		double cost = 0;
+		int cost = 0;
 		for( Vertex v : g.getVertices()){
 			for( Arc a : v.getDeltaPlus()){
 				cost += a.getFlowX() * a.getCost();
