@@ -379,8 +379,9 @@ public class SimplexAlgorithm {
 				}
 			}
 		}
-		System.out.println("max" + maxC);
 */
+		System.out.println("max " + maxC);
+
 		/**
 		 * Augmentieren: Nochmal den Kreis durchgehen und schauen obs in U oder
 		 * L ist.
@@ -498,22 +499,23 @@ public class SimplexAlgorithm {
 		
 		
 
-			for (Arc a : L) {
-				a.setReducedCost(a.getCost() + a.getTail().getPrice()
-						- a.getHead().getPrice());
-			}
-			for (Arc a : U) {
-				a.setReducedCost(a.getCost() + a.getTail().getPrice()
-						- a.getHead().getPrice());
-			}
 		}else{//e == f
 			//e wieder in L ode U einfuegen
 			if (e.getFlowX() == e.getLow())
-				L.add(f);
+				L.add(e);
 			else
 				U.add(e);
 		}
 		
+		for (Arc a : L) {
+			a.setReducedCost(a.getCost() + a.getTail().getPrice()
+					- a.getHead().getPrice());
+		}
+		for (Arc a : U) {
+			a.setReducedCost(a.getCost() + a.getTail().getPrice()
+					- a.getHead().getPrice());
+		}
+
 		//Knotenpreise ausgeben
 /*		String knotenpreise= "Knotenpreise:\n";
 		for( Vertex w : g.getVertices()){
