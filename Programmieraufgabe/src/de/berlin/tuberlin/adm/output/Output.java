@@ -11,13 +11,13 @@ public class Output {
 	
 	private final String eol = System.getProperty("line.separator");
 
-	public Output(String path, Graph graph) throws IOException{
+	public Output(String path, Graph graph, int gesamtkosten) throws IOException{
 		FileWriter fstream;
 		fstream = new FileWriter(path + "/Ergebnis" + ".txt");
 		BufferedWriter out = new BufferedWriter(fstream);
 		
 		out.write("Es folgen die Ergebnisse:" + eol);
-		
+		out.write(gesamtkosten + eol);
 		//minimale Kosten ausgeben
 		//weg angeben, zur zeit noch alle Kanten ausgaben:
 		for(Arc a : graph.getArcs()){

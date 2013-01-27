@@ -17,7 +17,7 @@ public class netzwerksimplex {
 		
 		//args[0] ist Eingabedatei
 		//mit Input sollen die Daten eingelesen werden und ein Graph zurück gegeben werden
-		Input input = new Input("src/InputData/gte_bad.200");
+		Input input = new Input("src/InputData/big7.net");
 		System.out.println("Time in ms: " + input.getStopwatch().getElapsedTime());
 
 		
@@ -25,12 +25,12 @@ public class netzwerksimplex {
 		System.out.println(input.getGraph().toString());
 		SimplexAlgorithm simplex = new SimplexAlgorithm(input.getGraph());
 		simplex.startOptimierung();
-		System.out.println(input.getGraph().toString());
+//		System.out.println(input.getGraph().toString());
 
 		System.out.println("Time in ms: " + simplex.getStopwatch().getElapsedTime());
 
 		//args[1] ist Ausgabedatei und bekommt von SimplexAlgorithmus das Ergebnis, welches in eine Ausgabedatei geschrieben werden soll.
-		Output output = new Output("src/OutputData", simplex.getGraph());
+		Output output = new Output("src/OutputData", simplex.getGraph(), simplex.calculateObjective());
 	}
 
 }
