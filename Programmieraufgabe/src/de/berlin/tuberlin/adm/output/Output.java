@@ -11,7 +11,7 @@ public class Output {
 	
 	private final String eol = System.getProperty("line.separator");
 
-	public Output(String path, Graph graph, int gesamtkosten) throws IOException{
+	public Output(String path, Graph graph, double gesamtkosten) throws IOException{
 		FileWriter fstream;
 		fstream = new FileWriter(path + "/Ergebnis" + ".txt");
 		BufferedWriter out = new BufferedWriter(fstream);
