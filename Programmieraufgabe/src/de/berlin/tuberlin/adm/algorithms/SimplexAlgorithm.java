@@ -105,6 +105,7 @@ public class SimplexAlgorithm {
 					// g.getMaxCost()); // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(-nettoB); // Fluss x bestimmen
+					a.setT(true);
 					g.addArc(a);
 					T.add(a);
 				} else {
@@ -115,6 +116,7 @@ public class SimplexAlgorithm {
 					// g.getMaxCost()); // M entsprechend (7.27)
 					a.setCost(M);
 					a.setFlowX(nettoB); // Fluss x bestimmen
+					a.setT(true);
 					g.addArc(a);
 					T.add(a);
 				}
@@ -186,7 +188,10 @@ public class SimplexAlgorithm {
 	 * @return max Wert
 	 */
 	private int calcAugValue ( Vertex u , Vertex v , boolean b , boolean isL){
+		
 		Arc tmp = u.getArc(v);
+		if( !tmp.isT())
+			tmp = v.getArc(u);
 		
 		if(isL){//e ist in L, d.h. wir wollen Fluss erhöhen(auf Vor-Knoten)
 			if (b){//u und v sind aus u
@@ -403,6 +408,9 @@ public class SimplexAlgorithm {
 		if (!e.equals(f)) {
 			T.remove(f);
 			T.add(e);
+			e.setT(true);
+			f.setT(false);
+			
 			
 			L.remove(e);
 			if (f.getFlowX() == f.getLow())
@@ -482,6 +490,9 @@ public class SimplexAlgorithm {
 
 			for (int p = u.size()-1 ; p > 0; p--) {
 				Arc a = u.get(p-1).getArc(u.get(p));
+				if(!a.isT())
+					a= u.get(p).getArc(u.get(p-1));
+				
 				if (a.getHead().equals(u.get(p-1))) {
 					a.setFlowX(a.getFlowX() + augValue);
 					if(a.getFlowX() == a.getCap()){
@@ -499,6 +510,9 @@ public class SimplexAlgorithm {
 			
 			for (int p = 0; p < v.size() - 1; p++){
 				Arc a = v.get(p).getArc(v.get(p + 1));
+				if(!a.isT())
+					a= v.get(p+1).getArc(v.get(p));
+				
 				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
 					a.setFlowX(a.getFlowX() + augValue);
 					if(a.getFlowX() == a.getCap()){
@@ -515,7 +529,10 @@ public class SimplexAlgorithm {
 			}
 			
 			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
-				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1)); 
+				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1));
+				if(!lastA.isT())
+					lastA= u.get(u.size()-1).getArc(v.get(v.size()-1));
+				
 				if (lastA.getHead().equals(u.get(u.size() - 1))) {
 					lastA.setFlowX(lastA.getFlowX() + augValue);
 					if(lastA.getFlowX() == lastA.getCap()){
@@ -540,7 +557,10 @@ public class SimplexAlgorithm {
 			}
 
 			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
-				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1)); 
+				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1));
+				if(!lastA.isT())
+					lastA= u.get(u.size()-1).getArc(v.get(v.size()-1));
+				
 				if (lastA.getHead().equals(u.get(u.size() - 1))) {
 					lastA.setFlowX(lastA.getFlowX() - augValue);
 					if( lastA.getFlowX() == lastA.getLow()){
@@ -558,6 +578,9 @@ public class SimplexAlgorithm {
 			
 			for (int p = v.size()-1; p > 0; p--){
 				Arc a = v.get(p-1).getArc(v.get(p));
+				if(!a.isT())
+					a= v.get(p).getArc(v.get(p-1));
+				
 				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
 					a.setFlowX(a.getFlowX() - augValue);
 					if( a.getFlowX() == a.getLow()){
@@ -577,6 +600,9 @@ public class SimplexAlgorithm {
 														// Weg von u0 bis un
 														// durchlafen
 				Arc a = u.get(p).getArc(u.get(p + 1));
+				if(!a.isT())
+					a= u.get(p+1).getArc(u.get(p));
+				
 				if (a.getHead().equals(u.get(p))) {
 					a.setFlowX(a.getFlowX() - augValue);
 					if( a.getFlowX() == a.getLow()){
@@ -942,7 +968,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/big7.net");
+			Input r = new Input("src/InputData/cap1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
