@@ -227,7 +227,6 @@ public class SimplexAlgorithm {
 		
 		//System.out.println("entering arc: "+e.getTail().getId() +
 		//						" nach " + e.getHead().getId());
-		//T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
@@ -393,6 +392,7 @@ public class SimplexAlgorithm {
 			}
 		}
 	*/	
+		//System.out.println("augValue: "+maxC);
 		Arc f = this.aug(u, v, e, maxC);
 		/*
 		 * Baumloesung aktualisieren
@@ -481,7 +481,7 @@ public class SimplexAlgorithm {
 			}
 
 			for (int p = u.size()-1 ; p > 0; p--) {
-				Arc a = u.get(p).getArc(u.get(p - 1));
+				Arc a = u.get(p-1).getArc(u.get(p));
 				if (a.getHead().equals(u.get(p-1))) {
 					a.setFlowX(a.getFlowX() + augValue);
 					if(a.getFlowX() == a.getCap()){
@@ -515,7 +515,7 @@ public class SimplexAlgorithm {
 			}
 			
 			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
-				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); 
+				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1)); 
 				if (lastA.getHead().equals(u.get(u.size() - 1))) {
 					lastA.setFlowX(lastA.getFlowX() + augValue);
 					if(lastA.getFlowX() == lastA.getCap()){
@@ -540,7 +540,7 @@ public class SimplexAlgorithm {
 			}
 
 			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
-				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); 
+				Arc lastA = v.get(v.size() - 1).getArc(u.get(u.size() - 1)); 
 				if (lastA.getHead().equals(u.get(u.size() - 1))) {
 					lastA.setFlowX(lastA.getFlowX() - augValue);
 					if( lastA.getFlowX() == lastA.getLow()){
@@ -557,7 +557,7 @@ public class SimplexAlgorithm {
 			}
 			
 			for (int p = v.size()-1; p > 0; p--){
-				Arc a = v.get(p).getArc(v.get(p - 1));
+				Arc a = v.get(p-1).getArc(v.get(p));
 				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
 					a.setFlowX(a.getFlowX() - augValue);
 					if( a.getFlowX() == a.getLow()){
@@ -942,7 +942,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/cap1.net");
+			Input r = new Input("src/InputData/stndrd3.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
