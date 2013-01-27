@@ -12,11 +12,23 @@ public class Arc {
 	private int flowX; // x(a)
 	
 	private char uORv;
+	private boolean isT;
 	
 	
+	
+
 	public Arc (Vertex tail, Vertex head){
 		this.head = head;
 		this.tail = tail;
+		this.isT = false;
+	}
+	
+	public boolean isT() {
+		return isT;
+	}
+
+	public void setT(boolean isT) {
+		this.isT = isT;
 	}
 	
 	public Vertex getHead() {
