@@ -193,6 +193,7 @@ public class SimplexAlgorithm {
 		if( !tmp.isT())
 			tmp = v.getArc(u);
 		
+		
 		if(isL){//e ist in L, d.h. wir wollen Fluss erhöhen(auf Vor-Knoten)
 			if (b){//u und v sind aus u
 				if(tmp.getHead().equals(u))	//Vorwaertskante
@@ -230,8 +231,8 @@ public class SimplexAlgorithm {
 	 */
 	private void augmentieren(Arc e) {
 		
-		System.out.println("entering arc: "+e.getTail().getId() +
-								" nach " + e.getHead().getId());
+		//System.out.println("entering arc: "+e.getTail().getId() +
+		//						" nach " + e.getHead().getId());
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
@@ -396,8 +397,21 @@ public class SimplexAlgorithm {
 				}
 			}
 		}
-	*/	
-		//System.out.println("augValue: "+maxC);
+		
+		
+		if( e.getTail().getId()==82 && e.getHead().getId()==689){
+			String test="";
+			for(Vertex r : u){
+				test+=r.getId()+"; ";
+			}
+			test+="\n";
+			for(Vertex r : v){
+				test+=r.getId()+"; ";
+			}
+			System.out.println(test);
+			System.out.println("max: "+maxC);
+		}
+*/		//System.out.println("augValue: "+maxC);
 		Arc f = this.aug(u, v, e, maxC);
 		/*
 		 * Baumloesung aktualisieren
@@ -581,7 +595,7 @@ public class SimplexAlgorithm {
 				if(!a.isT())
 					a= v.get(p).getArc(v.get(p-1));
 				
-				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
+				if (a.getHead().equals(v.get(p))) { // Vorwaertsbogen
 					a.setFlowX(a.getFlowX() - augValue);
 					if( a.getFlowX() == a.getLow()){
 						leaving = a;
@@ -945,9 +959,9 @@ public class SimplexAlgorithm {
 	 * Berechnet die Gesamtkosten
 	 * @return Kosten des Flusses
 	 */
-	public int calculateObjective(){
+	public double calculateObjective(){
 		
-		int cost = 0;
+		double cost = 0;
 		for( Vertex v : g.getVertices()){
 			for( Arc a : v.getDeltaPlus()){
 				cost += a.getFlowX() * a.getCost();
