@@ -225,8 +225,8 @@ public class SimplexAlgorithm {
 	 */
 	private void augmentieren(Arc e) {
 		
-		//System.out.println("entering arc: "+e.getTail().getId() +
-		//						" nach " + e.getHead().getId());
+		System.out.println("entering arc: "+e.getTail().getId() +
+								" nach " + e.getHead().getId());
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
 		u.add(e.getTail());
@@ -942,7 +942,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/stndrd3.net");
+			Input r = new Input("src/InputData/big7.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
