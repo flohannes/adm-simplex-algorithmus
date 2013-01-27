@@ -315,7 +315,7 @@ public class SimplexAlgorithm {
 		 * Augmentieren: Nochmal den Kreis durchgehen und schauen obs in U oder
 		 * L ist.
 		 */
-		if (e.getReducedCost() < 0) { // e ist aus L
+/*		if (e.getReducedCost() < 0) { // e ist aus L
 			e.setFlowX(e.getFlowX() + maxC); // Fluss auf e erhoehen
 
 			for (int p = 0; p < v.size() - 1; p++) { // maxC finden. Weg von v0
@@ -392,11 +392,12 @@ public class SimplexAlgorithm {
 				}
 			}
 		}
-		
+	*/	
+		Arc f = this.aug(u, v, e, maxC);
 		/*
 		 * Baumloesung aktualisieren
 		 */
-		Arc f = this.findF(u, v, e);
+	//	Arc f = this.findF(u, v, e);
 		//System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
@@ -461,6 +462,142 @@ public class SimplexAlgorithm {
 		System.out.println(test);
 	*/
 	}
+	/**
+	 * Augmentiert auf dem Kreis C in T + e und gibt gleichzeitig den leaving arc aus
+	 * @param u
+	 * @param v
+	 * @param e
+	 * @param augValue
+	 * @return
+	 */
+	private Arc aug( List<Vertex> u , List<Vertex> v , Arc e , int augValue){
+		Arc leaving = null;
+		
+		if (e.getReducedCost() < 0) { // e ist aus L
+			
+			e.setFlowX(e.getFlowX() + augValue); // Fluss auf e erhoeht
+			if( e.getFlowX() == e.getCap()){
+				leaving = e;
+			}
+
+			for (int p = u.size()-1 ; p > 0; p--) {
+				Arc a = u.get(p).getArc(u.get(p - 1));
+				if (a.getHead().equals(u.get(p-1))) {
+					a.setFlowX(a.getFlowX() + augValue);
+					if(a.getFlowX() == a.getCap()){
+						leaving = a;
+						leaving.setuORv('u');
+					}
+				}else{
+					a.setFlowX(a.getFlowX() - augValue);
+					if(a.getFlowX() == a.getLow()){
+						leaving = a;
+						leaving.setuORv('u');
+					}
+				}
+			}
+			
+			for (int p = 0; p < v.size() - 1; p++){
+				Arc a = v.get(p).getArc(v.get(p + 1));
+				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
+					a.setFlowX(a.getFlowX() + augValue);
+					if(a.getFlowX() == a.getCap()){
+						leaving = a;
+						leaving.setuORv('v');
+					}
+				}else{ // Rueckwaertsbogen
+					a.setFlowX(a.getFlowX() - augValue);
+					if(a.getFlowX() == a.getLow()){
+						leaving = a;
+						leaving.setuORv('v');
+					}
+				}
+			}
+			
+			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); 
+				if (lastA.getHead().equals(u.get(u.size() - 1))) {
+					lastA.setFlowX(lastA.getFlowX() + augValue);
+					if(lastA.getFlowX() == lastA.getCap()){
+						leaving = lastA;
+						leaving.setuORv('v');
+					}
+				} else {
+					lastA.setFlowX(lastA.getFlowX() - augValue);
+					if(lastA.getFlowX() == lastA.getLow()){
+						leaving = lastA;
+						leaving.setuORv('v');
+					}
+				}
+				
+			}
+			
+
+		} else {// e ist aus U
+			e.setFlowX(e.getFlowX() - augValue); // Fluss auf e verringern
+			if( e.getFlowX() == e.getLow()){
+				leaving = e;
+			}
+
+			if( v.size() != 0){ //wenn v.size == 0, dann ist lastA genau e, brauchen also nichts zu tun
+				Arc lastA = u.get(u.size() - 1).getArc(v.get(v.size() - 1)); 
+				if (lastA.getHead().equals(u.get(u.size() - 1))) {
+					lastA.setFlowX(lastA.getFlowX() - augValue);
+					if( lastA.getFlowX() == lastA.getLow()){
+						leaving = lastA;
+						leaving.setuORv('v');
+					}
+				} else {
+					lastA.setFlowX(lastA.getFlowX() + augValue);
+					if( lastA.getFlowX() == lastA.getCap()){
+						leaving = lastA;
+						leaving.setuORv('v');
+					}
+				}
+			}
+			
+			for (int p = v.size()-1; p > 0; p--){
+				Arc a = v.get(p).getArc(v.get(p - 1));
+				if (a.getTail().equals(v.get(p))) { // Vorwaertsbogen
+					a.setFlowX(a.getFlowX() - augValue);
+					if( a.getFlowX() == a.getLow()){
+						leaving = a;
+						leaving.setuORv('v');
+					}
+				} else { // Rueckwaertsbogen
+					a.setFlowX(a.getFlowX() + augValue);
+					if( a.getFlowX() == a.getCap()){
+						leaving = a;
+						leaving.setuORv('v');
+					}
+				}
+			}
+			
+			for (int p = 0; p < u.size() - 1; p++) { // weiterhin maxC finden.
+														// Weg von u0 bis un
+														// durchlafen
+				Arc a = u.get(p).getArc(u.get(p + 1));
+				if (a.getHead().equals(u.get(p))) {
+					a.setFlowX(a.getFlowX() - augValue);
+					if( a.getFlowX() == a.getLow()){
+						leaving = a;
+						leaving.setuORv('u');
+					}
+				} else {
+					a.setFlowX(a.getFlowX() + augValue);
+					if( a.getFlowX() == a.getCap()){
+						leaving = a;
+						leaving.setuORv('u');
+					}
+				}
+			}
+			
+			
+		}
+		return leaving;
+	}
+	
+	
 
 	/**
 	 * Findet die aus T + e zu entfernende Kante, mit Anti-Cicling Regel
@@ -805,7 +942,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/stndrd1.net");
+			Input r = new Input("src/InputData/cap1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
