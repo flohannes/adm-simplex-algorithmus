@@ -225,8 +225,8 @@ public class SimplexAlgorithm {
 	 */
 	private void augmentieren(Arc e) {
 		
-		System.out.println("entering arc: "+e.getTail().getId() +
-								" nach " + e.getHead().getId());
+		//System.out.println("entering arc: "+e.getTail().getId() +
+		//						" nach " + e.getHead().getId());
 		//T.add(e);
 		List<Vertex> u = new ArrayList<Vertex>();
 		List<Vertex> v = new ArrayList<Vertex>();
@@ -397,7 +397,7 @@ public class SimplexAlgorithm {
 		 * Baumloesung aktualisieren
 		 */
 		Arc f = this.findF(u, v, e);
-		System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
+		//System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
 			T.remove(f);
@@ -807,7 +807,7 @@ public class SimplexAlgorithm {
 		try {
 			Input r = new Input("src/InputData/stndrd1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
-			System.out.println(sim.getGraph().toString());
+			//System.out.println(sim.getGraph().toString());
 
 			// sim.initialize();
 			sim.startOptimierung();
