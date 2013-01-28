@@ -17,7 +17,7 @@ public class Graph {
 			Vertex v = new Vertex( i+1 );
 			v.setFlow(0);
 			this.addVertex(v);
-		}//jetzt brauch man in INput nur noch setFlow für die angegebenen Knoten aufrufen
+		}//jetzt braucht man in INput nur noch setFlow fuer die angegebenen Knoten aufrufen
 	}
 	
 
@@ -27,7 +27,7 @@ public class Graph {
 	
 	public void addVertex(Vertex v){
 		this.vertices.add(v);
-		// so bräuchte man doch bei getVertexById nicht immer die ganze arraylist durchlaufen
+		// so braeuchte man doch bei getVertexById nicht immer die ganze arraylist durchlaufen
 		//id = Stelle an der der Knoten gespeichert ist
 		//this.vertices.add(v.getId(),v);
 	}
