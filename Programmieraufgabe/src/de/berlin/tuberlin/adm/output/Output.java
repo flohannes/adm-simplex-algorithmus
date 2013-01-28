@@ -13,7 +13,8 @@ public class Output {
 
 	public Output(String path, Graph graph, double gesamtkosten) throws IOException{
 		FileWriter fstream;
-		fstream = new FileWriter(path + "/Ergebnis" + ".txt");
+//		fstream = new FileWriter(path + "/Ergebnis" + ".txt");
+		fstream = new FileWriter(path);
 		BufferedWriter out = new BufferedWriter(fstream);
 		
 		out.write("Es folgen die Ergebnisse:" + eol);
