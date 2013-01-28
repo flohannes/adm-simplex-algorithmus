@@ -23,7 +23,7 @@ public class SimplexAlgorithm {
 	private int[] d;
 	private int[] s;
 
-	// fuer die oberen Kapazitaeten der neun Kanten
+	// fuer die oberen Kapazitaeten der neuen Kanten
 	final int inf = Integer.MAX_VALUE;
 
 	public SimplexAlgorithm(Graph g) {
@@ -83,6 +83,7 @@ public class SimplexAlgorithm {
 		// V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
 		k.setFlow(0);
+		k.setPrice(0);
 		g.addVertex(k);
 
 		// A'
@@ -107,6 +108,8 @@ public class SimplexAlgorithm {
 					a.setCost(M);
 					a.setFlowX(-nettoB); // Fluss x bestimmen
 					a.setT(true);
+					a.setReducedCost(0);
+					v.setPrice(-M);
 					g.addArc(a);
 					//T.add(a);
 				} else {
@@ -118,6 +121,8 @@ public class SimplexAlgorithm {
 					a.setCost(M);
 					a.setFlowX(nettoB); // Fluss x bestimmen
 					a.setT(true);
+					a.setReducedCost(0);
+					v.setPrice(M);
 					g.addArc(a);
 					//T.add(a);
 				}
@@ -140,7 +145,7 @@ public class SimplexAlgorithm {
 		}
 
 		// Knotenpreise und reduzierte Kosten in T
-		k.setPrice(0);
+/*		k.setPrice(0);
 		for (Arc a : k.getDeltaPlus()) {
 			a.getHead().setPrice(M); // immer MaxCost
 			a.setReducedCost(0);	//reduzierte kosten im baum immer 0
@@ -149,7 +154,7 @@ public class SimplexAlgorithm {
 			a.getTail().setPrice(-M); //Knotenpreis
 			a.setReducedCost(0);	//reduzierte kosten im baum immer 0
 		}
-		// reduzierte Kosten in L
+*/		// reduzierte Kosten in L
 		for (Arc a : L) {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
