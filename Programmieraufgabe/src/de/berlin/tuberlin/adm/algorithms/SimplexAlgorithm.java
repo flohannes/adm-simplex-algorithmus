@@ -57,6 +57,7 @@ public class SimplexAlgorithm {
 			i++;
 		}
 		stopwatch.stop();
+		System.out.println("Dauer: "+stopwatch.getElapsedTime());
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class SimplexAlgorithm {
 		
 		//L = (ArrayList<Arc>) g.getArcs(); // Wir schreiben erstmal alle Boegen
 											// in L
-		T = new ArrayList<Arc>();
+		//T = new ArrayList<Arc>();
 		U = new ArrayList<Arc>(); // Bleibt erstmal Leer
 
 		int M = (int) (1 + (0.5 * (g.getVertices().size())) * g.getMaxCost()); // M
@@ -107,7 +108,7 @@ public class SimplexAlgorithm {
 					a.setFlowX(-nettoB); // Fluss x bestimmen
 					a.setT(true);
 					g.addArc(a);
-					T.add(a);
+					//T.add(a);
 				} else {
 					Arc a = new Arc(k, v);
 					a.setLow(0);
@@ -118,7 +119,7 @@ public class SimplexAlgorithm {
 					a.setFlowX(nettoB); // Fluss x bestimmen
 					a.setT(true);
 					g.addArc(a);
-					T.add(a);
+					//T.add(a);
 				}
 			}
 		}
@@ -420,19 +421,24 @@ public class SimplexAlgorithm {
 		//System.out.println("leaving arc: "+f.getTail().getId()+" nach "+f.getHead().getId());
 		// update Knotenpreise
 		if (!e.equals(f)) {
-			T.remove(f);
-			T.add(e);
+			//T.remove(f);
+			//T.add(e);
 			e.setT(true);
 			f.setT(false);
 			
-			
-			L.remove(e);
-			if (f.getFlowX() == f.getLow())
-				L.add(f);
-
-			U.remove(e);
-			if (f.getFlowX() == f.getCap())
-				U.add(f);
+			if( e.getReducedCost() < 0){//e war in L
+				L.remove(e);
+				if (f.getFlowX() == f.getLow())
+					L.add(f);
+				else 
+					U.add(f);
+			}else{ //e war in U
+				U.remove(e);
+				if (f.getFlowX() == f.getCap())
+					U.add(f);
+				else
+					L.add(f);
+			}
 		
 			//update Knotenpreise
 			this.updateKnotenpreise(e, f);
@@ -445,6 +451,7 @@ public class SimplexAlgorithm {
 			}else if(f.getuORv() == 'u'){
 				this.updateP(e,f, u);
 			}
+			
 			
 		
 		
@@ -465,6 +472,7 @@ public class SimplexAlgorithm {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
 		}
+		
 
 		//Knotenpreise ausgeben
 /*		String knotenpreise= "Knotenpreise:\n";
@@ -940,10 +948,10 @@ public class SimplexAlgorithm {
 		pds = pds+ "]\ns: [";
 		
 		for( int i : this.s) pds = pds+ i+" ;";
-		pds = pds +"]\nT: [";
-		
-		for(Arc a : T) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
 		pds = pds +"]\nL: [";
+		
+		//for(Arc a : T) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
+		//pds = pds +"]\nL: [";
 		
 		for(Arc a : L) pds = pds + "("+a.getTail().getId()+","+a.getHead().getId()+")  ";
 		pds = pds +"]\nU: [";
