@@ -182,7 +182,7 @@ public class SimplexAlgorithm {
 	}
 	
 	/**
-	 * Gibt den max Wert zurück, um den auf dieser Kante augmentiert werden kann
+	 * Gibt den max Wert zurueck, um den auf dieser Kante augmentiert werden kann
 	 * @param u erster Knoten, vorderer in der Liste
 	 * @param v zweiter Knoten, hinterer in der Liste
 	 * @param b true, falls u und v in aus der Liste u, sonst false
@@ -195,7 +195,7 @@ public class SimplexAlgorithm {
 			tmp = v.getArc(u);
 		
 		
-		if(isL){//e ist in L, d.h. wir wollen Fluss erhöhen(auf Vor-Knoten)
+		if(isL){//e ist in L, d.h. wir wollen Fluss erhoehen(auf Vor-Knoten)
 			if (b){//u und v sind aus u
 				if(tmp.getHead().equals(u))	//Vorwaertskante
 					return tmp.getCap() - tmp.getFlowX();
@@ -701,7 +701,7 @@ public class SimplexAlgorithm {
 	 * Findet die aus T + e zu entfernende Kante, mit Anti-Cicling Regel
 	 * war e in L: Laufe den Kreis C vom Scheitel aus in der Orientierung von e durch, und entferne die letzte blockierende Kante
 	 * war e in U: Laufe C entgegengesetzt der Richtung von e durch, entferne ebenfalls die letzte blockierende Kante
-	 * Im Code: Gehe C jeweils in anderer Richtung durch und wähle die erste blockierende Kante
+	 * Im Code: Gehe C jeweils in anderer Richtung durch und waehle die erste blockierende Kante
 	 * @param u , der letzte Knoten in u entspricht dem Scheitel von C
 	 * @param v
 	 * @param e
@@ -806,7 +806,7 @@ public class SimplexAlgorithm {
 		}
 		int tiefe = d[k.getId() - 1];
 		
-		//ein Schritt der unteren While-Schleife außerhalb, um dann als Bedingung " > " benutzten zu koennen (>= funktioniert nicht)
+		//ein Schritt der unteren While-Schleife ausserhalb, um dann als Bedingung " > " benutzten zu koennen (>= funktioniert nicht)
 		if (l.getuORv() == 'u') {
 			k.setPrice(k.getPrice() - e.getReducedCost());
 		} else if (l.getuORv() == 'v') {
@@ -959,7 +959,7 @@ public class SimplexAlgorithm {
 	private void updateP(Arc e, Arc l, List<Vertex> uORv) {
 		//Nur pivot-Weg aendert sich. p=v1,...,vk
 		
-		//v koennte auch leer sein deshalb der erste schritt schon außerhalb der schleife
+		//v koennte auch leer sein deshalb der erste schritt schon ausserhalb der schleife
 		if(l.getuORv() == 'u'){
 			p[e.getTail().getId() -1] = e.getHead().getId();
 		}else{
@@ -1031,7 +1031,7 @@ public class SimplexAlgorithm {
 	}
 	
 	/**
-	 * Rekonstruiert den ursprünglichen Graphen, d.h. der Knoten k wird wieder entfernt
+	 * Rekonstruiert den urspruenglichen Graphen, d.h. der Knoten k wird wieder entfernt
 	 */
 	public void reconstruct(){
 		this.g.getVertices().remove(NumberOfNodes);
