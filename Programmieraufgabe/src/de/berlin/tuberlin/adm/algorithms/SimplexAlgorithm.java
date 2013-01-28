@@ -463,8 +463,9 @@ public class SimplexAlgorithm {
 			else
 				U.add(e);
 		}
+		this.updateReducedCosts(e);
 		
-		for (Arc a : L) {
+/*		for (Arc a : L) {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
 		}
@@ -472,7 +473,7 @@ public class SimplexAlgorithm {
 			a.setReducedCost(a.getCost() + a.getTail().getPrice()
 					- a.getHead().getPrice());
 		}
-		
+*/		
 
 		//Knotenpreise ausgeben
 /*		String knotenpreise= "Knotenpreise:\n";
@@ -645,7 +646,56 @@ public class SimplexAlgorithm {
 		return leaving;
 	}
 	
-	
+	/**
+	 * Aktualisiert die Reduzierten kosten
+	 * @param e entering arc
+	 */
+	private void updateReducedCosts(Arc e){
+		Vertex k;
+		int e2;
+		int tiefe;
+		
+		if( d[e.getHead().getId()-1] < d[e.getTail().getId()-1] ){
+			k= e.getTail();
+			e2 = k.getId();
+			tiefe = d[e2-1];
+		}else{
+			k=e.getHead();
+			e2= k.getId();
+			tiefe = d[e2-1];
+		}
+		
+		for(Arc a : k.getDeltaPlus()){
+			if(!a.isT())
+				a.setReducedCost(a.getCost() + a.getTail().getPrice()
+						- a.getHead().getPrice());
+		}
+		
+		for(Arc a : k.getDeltaMinus()){
+			if(!a.isT())
+				a.setReducedCost(a.getCost() + a.getTail().getPrice()
+						- a.getHead().getPrice());
+		}
+		k = g.getVertexById(s[e2-1]);
+		e2 = s[e2-1];
+		
+		while (d[e2-1] > tiefe){
+			
+			for(Arc a : k.getDeltaPlus()){
+				if(!a.isT())
+					a.setReducedCost(a.getCost() + a.getTail().getPrice()
+							- a.getHead().getPrice());
+			}
+			
+			for(Arc a : k.getDeltaMinus()){
+				if(!a.isT())
+					a.setReducedCost(a.getCost() + a.getTail().getPrice()
+							- a.getHead().getPrice());
+			}
+			k = g.getVertexById(s[e2-1]);
+			e2 = s[e2-1];
+		}
+	}
 
 	/**
 	 * Findet die aus T + e zu entfernende Kante, mit Anti-Cicling Regel
