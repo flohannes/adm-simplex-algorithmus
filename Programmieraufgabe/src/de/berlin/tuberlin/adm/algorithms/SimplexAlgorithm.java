@@ -39,6 +39,7 @@ public class SimplexAlgorithm {
 	/**
 	 * Optimiert die Baumloesung
 	 */
+	private int augementierungsschritte=0;
 	public void startOptimierung() {
 		stopwatch.start();
 		initialize();
@@ -51,6 +52,7 @@ public class SimplexAlgorithm {
 			//if(i==20)break;
 			if(e==null){
 				System.out.println("Anzahl Augmentierungsschritte:" + (i)); //Anzahl Augmentierungsschritte
+				augementierungsschritte = i;
 				break;
 			}
 			this.augmentieren(e);
@@ -1042,6 +1044,9 @@ public class SimplexAlgorithm {
 		this.g.getVertices().remove(NumberOfNodes);
 	}
 
+	public int getAugSchritte(){
+		return this.augementierungsschritte;
+	}
 	public static void main(String[] args) {
 
 		try {
