@@ -26,7 +26,7 @@ public class SimplexCalculationThread implements Runnable{
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			sim.startOptimierung();
 			Output output = new Output(this.output, sim.getGraph(), sim.calculateObjective());
-			this.panel.getErgebnisse().setText("Dauer: " + sim.getStopwatch().getElapsedTime() + "\n Augmentierungsschritte: " + sim.getAugSchritte() + "\n Kosten insgesamt: "+ sim.calculateObjective());
+			this.panel.getErgebnisse().setText("<html>Dauer: " + sim.getStopwatch().getElapsedTime() + "<br> Augmentierungsschritte: " + sim.getAugSchritte() + "<br> Kosten insgesamt: "+ sim.calculateObjective()+"</html>");
 			panel.getOutputButton().setEnabled(true);
 			panel.getOutputPath().setEnabled(true);
 			panel.getInputPath().setEnabled(true);
