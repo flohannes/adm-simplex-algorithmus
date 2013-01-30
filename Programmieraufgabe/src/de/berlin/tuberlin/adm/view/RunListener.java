@@ -24,16 +24,16 @@ public class RunListener implements ActionListener{
 			panel.getInputPath().setEnabled(false);
 			panel.getInputButton().setEnabled(false);
 			panel.getRun().setText("Stop calculation");
+			isRunning = !isRunning;
 			iteration.start();
 		}
 		else{
-			iteration.destroy();
 			panel.getOutputButton().setEnabled(true);
 			panel.getOutputPath().setEnabled(true);
 			panel.getInputPath().setEnabled(true);
 			panel.getInputButton().setEnabled(true);
 			panel.getRun().setText("Start calculation");
-
+			iteration.stop();
 		}
 
 	}
