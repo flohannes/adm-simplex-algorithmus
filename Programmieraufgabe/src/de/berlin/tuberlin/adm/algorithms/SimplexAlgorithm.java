@@ -1047,10 +1047,28 @@ public class SimplexAlgorithm {
 	public int getAugSchritte(){
 		return this.augementierungsschritte;
 	}
+	
+	private void check(){
+		
+		for( Vertex v : this.g.getVertices()){
+			double sum = 0;
+			for( Arc a : v.getDeltaMinus()){
+				sum += a.getFlowX();
+			}
+			for( Arc a : v.getDeltaPlus()){
+				sum -= a.getFlowX();
+			}
+			sum = sum - v.getFlow();
+			if( sum != 0)
+				System.out.println("Fluss stimmt nicht");
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/cap1.net");
+			Input r = new Input("src/InputData/stndrd45.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
@@ -1058,6 +1076,7 @@ public class SimplexAlgorithm {
 			sim.startOptimierung();
 
 			System.out.println("Kosten insgesamt: "+ sim.calculateObjective());
+			sim.check();
 			//System.out.println(sim.getGraph().toString());
 			// sim.startOptimierung();
 			// System.out.println(sim.getGraph().toString());
