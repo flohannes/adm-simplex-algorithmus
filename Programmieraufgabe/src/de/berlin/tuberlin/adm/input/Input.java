@@ -50,8 +50,8 @@ public class Input {
 				a.setFlowX(Integer.parseInt(inputString[3])); //setze Fluss auf min cap
 				graph.addArc(a);
 				
-				if(maxCost<a.getCost())
-					maxCost = a.getCost();
+				if(maxCost< Math.abs(a.getCost()))
+					maxCost = Math.abs(a.getCost());
 			}
 
 		}

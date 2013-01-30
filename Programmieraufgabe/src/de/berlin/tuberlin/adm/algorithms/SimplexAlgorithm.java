@@ -80,8 +80,6 @@ public class SimplexAlgorithm {
 
 		int M = (int) (1 + (0.5 * (g.getVertices().size())) * g.getMaxCost()); // M
 																				// entsprechend
-																				// (7.27)
-
 		// V' = V vereinigt k
 		Vertex k = new Vertex(g.getVertices().size() + 1);
 		k.setFlow(0);
@@ -1063,12 +1061,17 @@ public class SimplexAlgorithm {
 				System.out.println("Fluss stimmt nicht");
 		}
 		
+		for (Arc a : g.getVertexById(NumberOfNodes).getDeltaMinus())
+			if( a.getFlowX() != 0) System.out.println("unzulaessig");
+		for (Arc a : g.getVertexById(NumberOfNodes).getDeltaPlus())
+			if( a.getFlowX() != 0) System.out.println("unzulaessig");
+		
 	}
 	
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/stndrd45.net");
+			Input r = new Input("src/InputData/stndrd1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
@@ -1076,7 +1079,7 @@ public class SimplexAlgorithm {
 			sim.startOptimierung();
 
 			System.out.println("Kosten insgesamt: "+ sim.calculateObjective());
-			sim.check();
+			//sim.check();
 			//System.out.println(sim.getGraph().toString());
 			// sim.startOptimierung();
 			// System.out.println(sim.getGraph().toString());
