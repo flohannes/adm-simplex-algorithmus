@@ -59,7 +59,7 @@ public class SimplexAlgorithm {
 			i++;
 		}
 		stopwatch.stop();
-		System.out.println("Dauer: "+stopwatch.getElapsedTime());
+		System.out.println("Dauer: "+(stopwatch.getElapsedTime()/1000)+" Sek.");
 	}
 
 	/**
@@ -1081,7 +1081,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/cap1.net");
+			Input r = new Input("src/InputData/big7.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
