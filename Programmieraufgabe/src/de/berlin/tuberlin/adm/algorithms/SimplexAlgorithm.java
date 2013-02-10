@@ -171,19 +171,29 @@ public class SimplexAlgorithm {
 	 * @return null oder eine Kante e
 	 */
 	private Arc optimalitaetstest() {
+		
+		Arc entering = null;
+		int c = 0;
 		for (Arc a : L) {
-			if (a.getReducedCost() < 0) {
-				L.remove(a);
-				return a;
+			if( a.getReducedCost() < c){
+				entering = a;
+				c = a.getReducedCost();
 			}
 		}
+		c = -c;
 		for (Arc a : U) {
-			if (a.getReducedCost() > 0) {
-				U.remove(a);
-				return a;
+			if (a.getReducedCost() > c) {
+				entering = a;
+				c = a.getReducedCost();
 			}
 		}
-		return null;
+		if( entering != null){
+			if (entering.getReducedCost() < 0) L.remove(entering);
+			
+			else U.remove(entering);
+		}
+		
+		return entering;
 	}
 	
 	/**
@@ -1071,7 +1081,7 @@ public class SimplexAlgorithm {
 	public static void main(String[] args) {
 
 		try {
-			Input r = new Input("src/InputData/stndrd1.net");
+			Input r = new Input("src/InputData/cap1.net");
 			SimplexAlgorithm sim = new SimplexAlgorithm(r.getGraph());
 			//System.out.println(sim.getGraph().toString());
 
