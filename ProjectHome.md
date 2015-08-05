@@ -1,0 +1,1 @@
+Implementierung des Netzwerk- Simplex Algorithmus. Dieser ist im Laufe des WS 12/13 an der TU-Berlin entstanden.
